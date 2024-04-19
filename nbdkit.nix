@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     "--with-extra='Nixpkgs'"
   ];
 
-  outputLib = "dev";
-
   doCheck = true;
 
   outputs = [ "out" "dev" ];
