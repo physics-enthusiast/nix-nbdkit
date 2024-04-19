@@ -1,6 +1,7 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
 , gnutls
+, perlPluginSupport ? false
 , enableDocs ? true, perl
 }:
 
@@ -31,10 +32,14 @@ stdenv.mkDerivation rec {
     patchShebangs --build /build
   '';
 
+  # Most language plugins are automatically turned on or off based on the
+  # presence of relevant dependencies and headers. However, to build the
+  # docs perl has to be a nativeBuildInput. Hence, explicitly disable
+  # perl plugins if perlPluginSupport is false but enableDocs is true
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
-  ];
+  ] ++ lib.optional (!perlPluginSupport && enableDocs) "-disable-perl";
 
   doCheck = true;
 
