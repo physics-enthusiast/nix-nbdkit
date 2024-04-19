@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # Diagnostic info requested by upstream
-    "--with-extra='Built by Nix'"
+    "--with-extra='Nixpkgs'"
   ];
 
   doCheck = true;
