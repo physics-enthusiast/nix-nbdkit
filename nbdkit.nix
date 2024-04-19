@@ -10,7 +10,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "nbdkit";
-  inherit version
+  inherit version;
   src = fetchFromGitLab {
     owner = "nbdkit";
     repo = "nbdkit";
