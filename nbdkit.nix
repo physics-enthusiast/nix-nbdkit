@@ -2,6 +2,9 @@
 , fetchFromGitLab
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
+, goPluginSupport ? true, go
+, tclPluginSupport ? true, tcl
+, ocamlPluginSupport ? true, ocaml
 , perlPluginSupport ? true, perl, libxcrypt
 , enableManpages ? true
 }: 
@@ -23,12 +26,15 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ 
     autoreconfHook pkg-config 
   ]
-    ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ];
+    ++ lib.optionals goPluginSupport [ go ]
+    ++ lib.optionals tclPluginSupport [ tcl ]
+    ++ lib.optionals ocamlPluginSupport [ ocaml ]
+    ++ lib.optionals perlPluginSupport [ libxcrypt perl ];
 
   buildInputs = []
+    ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
-    ++ lib.optionals tlsSupport [ gnutls ]
-    ++ lib.optionals perlPluginSupport [ libxcrypt perl ];
+    ++ lib.optionals tlsSupport [ gnutls ];
 
   # Shell scripts with shebangs are ran during build
   # so we patchShebang everything. Anything that ends 
