@@ -43,6 +43,10 @@ stdenv.mkDerivation {
   # seems to miss a few.
   postConfigure = ''
     patchShebangs --build /build
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH="$TMPDIR/go"
+    export GOPROXY=off
+    export GOSUMDB=off
     go run /build/source/plugins/golang/config-test.go
   '';
 
