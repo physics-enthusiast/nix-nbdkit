@@ -25,5 +25,12 @@ stdenv.mkDerivation rec {
     patchShebangs --build .
   '';
 
+  configureFlags = [
+    # Diagnostic info requested by upstream
+    "--with-extra='Built by Nix'"
+  ];
+
+  doCheck = true;
+
   outputs = [ "out" "dev" ];
 }
