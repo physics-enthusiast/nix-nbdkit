@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ]
     ++ lib.optional enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ];
 
-  buildInputs = []
+  buildInputs = [ libselinux ]
     ++ lib.optional selinuxSupport [ libselinux ]
     ++ lib.optional tlsSupport [ gnutls ]
     ++ lib.optional perlPluginSupport [ libxcrypt perl ];
