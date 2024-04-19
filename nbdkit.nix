@@ -33,9 +33,8 @@ stdenv.mkDerivation rec {
   ];
 
   outputLib = "dev";
-  outputDoc = "doc";
 
   doCheck = true;
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" ];
 }
