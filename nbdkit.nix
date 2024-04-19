@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     autoreconfHook pkg-config 
   ]
     ++ lib.optional enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
-    ++ lib.optional perlPluginSupport [ libxcrypt (perl.withPackages (p: [ p.PodSimple ])) ];
+    ++ lib.optional perlPluginSupport [ libxcrypt perl ];
   buildInputs = [ gnutls ];
 
   # Shell scripts with shebangs are ran during build
