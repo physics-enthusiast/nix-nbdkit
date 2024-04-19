@@ -1,4 +1,4 @@
-{ lib, stdenv, automate, autoreconfHook, libtool
+{ lib, stdenv, autoconf, automake, autoreconfHook
 , fetchFromGitLab
 , gnutls
 }:
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook automake libtool ];
+  nativeBuildInputs = [ autoreconfHook automake autoconf ];
   buildInputs = [ gnutls ];
 
   outputs = [ "out" "dev" ];
