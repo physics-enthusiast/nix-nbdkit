@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
   # Shell scripts with shebangs are ran during build
   # so we patchShebang everything. Anything that ends 
   # up in the outputs will be patched again anyway. 
+  # For some reason patching the sources themselves
+  # seems to miss a few.
   postConfigure = ''
     patchShebangs --build /build
   '';
@@ -30,7 +32,11 @@ stdenv.mkDerivation rec {
     "--with-extra='Nixpkgs'"
   ];
 
+  outputLib = "dev"
+
+  outputDoc = "doc"
+
   doCheck = true;
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "doc" ];
 }
