@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ 
     autoreconfHook pkg-config 
   ]
-    ++ lib.optional enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
+    ++ lib.optional enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ];
 
   buildInputs = []
     ++ lib.optional bashCompletionSupport [ bash-completion ]
     ++ lib.optional selinuxSupport [ libselinux ]
     ++ lib.optional tlsSupport [ gnutls ]
-    ++ lib.optional perlPluginSupport [ libxcrypt perl ];;
+    ++ lib.optional perlPluginSupport [ libxcrypt perl ];
 
   # Shell scripts with shebangs are ran during build
   # so we patchShebang everything. Anything that ends 
