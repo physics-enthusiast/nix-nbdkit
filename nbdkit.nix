@@ -1,7 +1,7 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
 , gnutls
-, enableDocs ? true, perlPackages
+, enableDocs ? true, perlPackages, perl
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ 
     autoreconfHook pkg-config 
   ]
-    ++ lib.optional enableDocs [ perlPackages.PodSimple ];
+    ++ lib.optional enableDocs [ perl perlPackages.PodSimple ];
   buildInputs = [ gnutls ];
 
   # Shell scripts with shebangs are ran during build
