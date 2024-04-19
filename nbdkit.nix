@@ -1,6 +1,6 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
-, selinuxSupport ? stdenv.isLinux , libselinux
+, selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 , perlPluginSupport ? true, perl, libxcrypt
 , enableManpages ? true
