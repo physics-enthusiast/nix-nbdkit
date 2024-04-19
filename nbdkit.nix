@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ gnutls ];
 
-  postConfigurePhase = ''
+  # configure generates shell scripts
+  postConfigure = ''
     patchShebangs --build /build
   '';
 
