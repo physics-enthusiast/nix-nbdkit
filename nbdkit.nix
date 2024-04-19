@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "nbdkit";
     repo = "nbdkit";
     rev = "stable-${version}";
-    hash = lib.fakeHash;
+    hash = "sha256-7NTxC3HmN+3tzBDtxIOuHpfF184S8RjYbbKouW5Z//k=";
   };
 
   enableParallelBuilding = true;
