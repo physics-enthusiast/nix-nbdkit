@@ -5,7 +5,7 @@
 , perlPluginSupport ? true, perl, libxcrypt
 , enableManpages ? true
 }:
-
+throw selinuxSupport
 stdenv.mkDerivation rec {
   pname = "nbdkit";
   version = "1.36";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ]
     ++ lib.optional enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ];
 
-  buildInputs = [ libselinux ]
+  buildInputs = []
     ++ lib.optional selinuxSupport [ libselinux ]
     ++ lib.optional tlsSupport [ gnutls ]
     ++ lib.optional perlPluginSupport [ libxcrypt perl ];
