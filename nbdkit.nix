@@ -1,6 +1,5 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
-, bashCompletionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux , libselinux
 , tlsSupport ? true, gnutls
 , perlPluginSupport ? true, perl, libxcrypt
@@ -25,7 +24,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ];
 
   buildInputs = []
-    ++ lib.optional bashCompletionSupport [ bash-completion ]
     ++ lib.optional selinuxSupport [ libselinux ]
     ++ lib.optional tlsSupport [ gnutls ]
     ++ lib.optional perlPluginSupport [ libxcrypt perl ];
