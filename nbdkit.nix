@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ gnutls ]
+  buildInputs = [ gnutls ];
 
   outputs = [ "out" "dev" ];
 }
