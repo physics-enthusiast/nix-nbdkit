@@ -1,3 +1,3 @@
-{ pkgs ? import <nixpkgs> { system = builtins.currentSystem; } }: {
+{ pkgs ? import <nixpkgs> {} }: {
   nbdkit = pkgs.callPackage ./nbdkit.nix {};
 }
