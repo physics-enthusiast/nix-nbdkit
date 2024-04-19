@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
   # Shell scripts with shebangs are ran during build
   # so we patchShebang everything. Anything that ends 
   # up in the outputs will be patched again anyway. 
-  postPatch = ''
-    patchShebangs --build .
+  postConfigure = ''
+    patchShebangs --build /build
   '';
 
   configureFlags = [
