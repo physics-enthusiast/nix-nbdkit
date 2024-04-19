@@ -18,5 +18,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ gnutls ];
 
+  autoreconfPhase = ''
+    autoreconf -i
+  '';
   outputs = [ "out" "dev" ];
 }
