@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ 
     autoreconfHook pkg-config 
   ]
-    ++ lib.optional enableDocs [ perl.withPackages (p: [ p.PodSimple ]) ];
+    ++ lib.optional enableDocs [ (perl.withPackages (p: [ p.PodSimple ])) ];
   buildInputs = [ gnutls ];
 
   # Shell scripts with shebangs are ran during build
