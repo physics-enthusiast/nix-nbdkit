@@ -1,8 +1,8 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
 , gnutls
-, perlPluginSupport ? true
-, enableManpages ? true, perl
+, perlPluginSupport ? true, perl, libxcrypt
+, enableManpages ? true
 }:
 
 stdenv.mkDerivation rec {
