@@ -43,6 +43,7 @@ stdenv.mkDerivation {
   # seems to miss a few.
   postConfigure = ''
     patchShebangs --build /build
+    go run /build/source/plugins/golang/config-test.go
   '';
 
   # Most language plugins are automatically turned on or off based on the
