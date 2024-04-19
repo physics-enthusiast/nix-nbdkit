@@ -4,11 +4,13 @@
 , tlsSupport ? true, gnutls
 , perlPluginSupport ? true, perl, libxcrypt
 , enableManpages ? true
-}:
-throw selinuxSupport
-stdenv.mkDerivation rec {
-  pname = "nbdkit";
+}: 
+let
   version = "1.36";
+in
+stdenv.mkDerivation {
+  pname = "nbdkit";
+  inherit version
   src = fetchFromGitLab {
     owner = "nbdkit";
     repo = "nbdkit";
