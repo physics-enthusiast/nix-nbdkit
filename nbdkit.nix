@@ -1,8 +1,8 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
 , gnutls
-, perlPluginSupport ? false
-, enableDocs ? true, perl
+, perlPluginSupport ? true
+, enableManpages ? true, perl
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ 
     autoreconfHook pkg-config 
   ]
-    ++ lib.optional enableDocs [ (perl.withPackages (p: [ p.PodSimple ])) ];
+    ++ lib.optional enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
+    ++ lib.optional perlPluginSupport [ libxcrypt (perl.withPackages (p: [ p.PodSimple ])) ];
   buildInputs = [ gnutls ];
 
   # Shell scripts with shebangs are ran during build
@@ -34,14 +35,18 @@ stdenv.mkDerivation rec {
 
   # Most language plugins are automatically turned on or off based on the
   # presence of relevant dependencies and headers. However, to build the
-  # docs perl has to be a nativeBuildInput. Hence, explicitly disable
-  # perl plugins if perlPluginSupport is false but enableDocs is true
+  # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
+  # perl plugins if perlPluginSupport is false but enableManpages is true
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
-  ] ++ lib.optional (!perlPluginSupport && enableDocs) "-disable-perl";
+  ] ++ lib.optional (!perlPluginSupport && enableManpages) "-disable-perl";
 
   doCheck = true;
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out" "dev"
+  ] ++ lib.optionals enableManpages [
+    "man"
+  ];
 }
