@@ -2,10 +2,10 @@
 , fetchFromGitLab
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
-, goPluginSupport ? true, go
-, tclPluginSupport ? true, tcl
-, ocamlPluginSupport ? true, ocaml
+, luaPluginSupport ? true, lua
 , perlPluginSupport ? true, perl, libxcrypt
+, pythonPluginSupport ? true, python
+, tclPluginSupport ? true, tcl
 , enableManpages ? true
 }: 
 let
@@ -26,10 +26,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ 
     autoreconfHook pkg-config 
   ]
-    ++ lib.optionals goPluginSupport [ go ]
-    ++ lib.optionals tclPluginSupport [ tcl ]
-    ++ lib.optionals ocamlPluginSupport [ ocaml ]
-    ++ lib.optionals perlPluginSupport [ libxcrypt perl ];
+    ++ lib.optionals luaPluginSupport [ lua ]
+    ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
+    ++ lib.optionals pythonPluginSupport [ (python.withPackages (p: [ p.boto3 p.google-cloud-storage ])) ]
+    ++ lib.optionals tclPluginSupport [ tcl ];
 
   buildInputs = []
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
