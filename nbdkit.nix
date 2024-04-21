@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "nbdkit";
     repo = "nbdkit";
     rev = "v${version}";
-    hash = "sha256-7NTxC3HmN+3tzBDtxIOuHpfF184S8RjYbbKouW5Z//k=";
+    hash = "sha256-jJWknok8Mnd0+MDXzEoN/hNpgxDKeXMaGzZclQdDpuQ=";
   };
 
   enableParallelBuilding = true;
