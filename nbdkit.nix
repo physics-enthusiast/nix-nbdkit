@@ -9,7 +9,7 @@
 , enableManpages ? true
 }: 
 let
-  version = "1.36";
+  version = "1.39.4";
 in
 stdenv.mkDerivation {
   pname = "nbdkit";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "nbdkit";
     repo = "nbdkit";
-    rev = "stable-${version}";
+    rev = "v${version}";
     hash = "sha256-7NTxC3HmN+3tzBDtxIOuHpfF184S8RjYbbKouW5Z//k=";
   };
 
