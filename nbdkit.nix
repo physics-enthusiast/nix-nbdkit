@@ -4,7 +4,7 @@
 , tlsSupport ? true, gnutls
 , luaPluginSupport ? true, lua
 , perlPluginSupport ? true, perl, libxcrypt
-, pythonPluginSupport ? true, python
+, pythonPluginSupport ? true, python3
 , tclPluginSupport ? true, tcl
 , enableManpages ? true
 }: 
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   ]
     ++ lib.optionals luaPluginSupport [ lua ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
-    ++ lib.optionals pythonPluginSupport [ (python.withPackages (p: [ p.boto3 p.google-cloud-storage ])) ]
+    ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: [ p.boto3 p.google-cloud-storage ])) ]
     ++ lib.optionals tclPluginSupport [ tcl ];
 
   buildInputs = []
