@@ -18,4 +18,4 @@ jobs:
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
       - run: |
-          nix build -L -f default.nix
+          nix build -L -f default.nix nbdkit.ocamlPackage
