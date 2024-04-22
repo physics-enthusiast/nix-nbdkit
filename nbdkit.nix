@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     ++ lib.optionals tlsSupport [ gnutls ];
 
   postPatch = ''
-    sed -i plugins/ocaml/Makefile.am -e 's|HAVE_OCAML$|FALSE|g'
+    sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '';
 
   # Shell scripts with shebangs are ran during build
@@ -72,17 +72,4 @@ stdenv.mkDerivation {
   ] ++ lib.optionals enableManpages [
     "man"
   ];
-}
-// lib.optionalAttrs ocamlPluginSupport {
-  ocamlPackage = stdenv.mkDerivation {
-    pname = "nbdkit-ocaml";
-    inherit version;
-    src = srcGetSubdir "plugins/ocaml";
-
-    enableParallelBuilding = true;
-
-    nativeBuildInputs = [ 
-      autoreconfHook pkg-config 
-    ];
-  };
 }
