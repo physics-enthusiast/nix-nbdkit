@@ -39,8 +39,7 @@ stdenv.mkDerivation {
     ++ lib.optionals tlsSupport [ gnutls ];
 
   postPatch = ''
-    rm plugins/ocaml/Makefile.am
-    sed -i configure.ac -e 's|plugins/ocaml/Makefile||g'
+    sed -i plugins/ocaml/Makefile.am -e 's|HAVE_OCAML|FALSE|g'
   '';
 
   # Shell scripts with shebangs are ran during build
