@@ -11,16 +11,16 @@
 }: 
 let
   version = "1.39.4";
-in
-stdenv.mkDerivation {
-  pname = "nbdkit";
-  inherit version;
   src = fetchFromGitLab {
     owner = "nbdkit";
     repo = "nbdkit";
     rev = "v${version}";
     hash = "sha256-jJWknok8Mnd0+MDXzEoN/hNpgxDKeXMaGzZclQdDpuQ=";
   };
+in
+stdenv.mkDerivation {
+  pname = "nbdkit";
+  inherit version src;
 
   enableParallelBuilding = true;
 
