@@ -78,5 +78,8 @@ stdenv.mkDerivation {
     pname = "nbdkit-ocaml";
     inherit version;
     src = srcGetSubdir "plugins/ocaml";
+    postPatch = ''
+      ls
+    '';
   };
 }
