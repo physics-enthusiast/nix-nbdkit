@@ -76,6 +76,6 @@ stdenv.mkDerivation {
 // lib.optionalAttrs ocamlPluginSupport {
   ocamlPackage = stdenv.mkDerivation {
     pname = "nbdkit-ocaml";
-    src = srcGetSubdir "plugins/ocaml"
+    src = srcGetSubdir "plugins/ocaml";
   };
 }
