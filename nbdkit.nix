@@ -1,5 +1,6 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
+, runCommand
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 , luaPluginSupport ? true, lua
@@ -17,6 +18,10 @@ let
     rev = "v${version}";
     hash = "sha256-jJWknok8Mnd0+MDXzEoN/hNpgxDKeXMaGzZclQdDpuQ=";
   };
+  srcGetSubdir = path: runCommand "" {} ''
+    mkdir -p $out
+    cp -r ${src}/${path}/. $out/
+  '';
 in
 stdenv.mkDerivation {
   pname = "nbdkit";
@@ -67,4 +72,10 @@ stdenv.mkDerivation {
   ] ++ lib.optionals enableManpages [
     "man"
   ];
+}
+// lib.optionalAttrs ocamlPluginSupport {
+  ocamlPackage = stdenv.mkDerivation {
+    pname = "nbdkit-ocaml";
+    src = srcGetSubdir "plugins/ocaml"
+  };
 }
