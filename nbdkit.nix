@@ -3,6 +3,7 @@
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 , luaPluginSupport ? true, lua
+, ocamlPluginSupport? true, ocaml
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
 , tclPluginSupport ? true, tcl
@@ -26,6 +27,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ 
     autoreconfHook pkg-config 
   ]
+    ++ lib.optionals ocamlPluginSupport [ ocaml ]
     ++ lib.optionals luaPluginSupport [ lua ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
     ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: [ p.boto3 p.google-cloud-storage ])) ]
@@ -35,6 +37,10 @@ stdenv.mkDerivation {
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
+
+  postPatch = ''
+    rm plugins/ocaml/Makefile.am
+  '';
 
   # Shell scripts with shebangs are ran during build
   # so we patchShebang everything. Anything that ends 
