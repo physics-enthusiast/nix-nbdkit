@@ -78,8 +78,11 @@ stdenv.mkDerivation {
     pname = "nbdkit-ocaml";
     inherit version;
     src = srcGetSubdir "plugins/ocaml";
-    postPatch = ''
-      ls
-    '';
+
+    enableParallelBuilding = true;
+
+    nativeBuildInputs = [ 
+      autoreconfHook pkg-config 
+    ];
   };
 }
