@@ -40,6 +40,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     rm plugins/ocaml/Makefile.am
+    sed -i configure.ac -e 's|plugins/ocaml/Makefile||g'
   '';
 
   # Shell scripts with shebangs are ran during build
