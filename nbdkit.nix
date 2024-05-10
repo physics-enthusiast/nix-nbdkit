@@ -54,8 +54,9 @@ stdenv.mkDerivation ({
   '';
 
   # Shell scripts with shebangs are ran during build
-  # so we patchShebang everything. Anything that ends 
-  # up in the outputs will be patched again anyway. 
+  # so we patchShebang everything --build. Anything
+  # that ends up in the outputs will be patched again
+  # to --host anyway. 
   # Patching the sources themselves misses a couple of
   # .sh.in files that aren't chmodded +x
   postConfigure = ''
