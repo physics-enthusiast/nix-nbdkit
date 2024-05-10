@@ -95,7 +95,7 @@ stdenv.mkDerivation ({
     # presence of relevant dependencies and headers. However, to build the
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
     # perl plugins if perlPluginSupport is false but enableManpages is true 
-    ++ lib.optional (!perlPluginSupport && enableManpages) "-disable-perl";
+    ++ lib.optional (!perlPluginSupport && enableManpages) "--disable-perl";
 
   doCheck = true;
 
