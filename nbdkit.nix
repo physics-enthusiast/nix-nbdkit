@@ -1,6 +1,7 @@
 { lib, stdenv, bash, autoreconfHook, pkg-config
 , fetchFromGitLab
 , runCommand
+, completionSupport ? bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 , goPluginSupport ? true, go
@@ -49,6 +50,7 @@ stdenv.mkDerivation ({
 
   buildInputs = []
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
+    ++ lib.optionals completionSupport [ bash-completion ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ]
     ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng ];
@@ -89,6 +91,9 @@ stdenv.mkDerivation ({
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
     # perl plugins if perlPluginSupport is false but enableManpages is true 
     ++ lib.optional (!perlPluginSupport && enableManpages) "--disable-perl";
+
+  installFlags = []
+    ++ lib.optionals completionSupport [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
   doCheck = false;
 
