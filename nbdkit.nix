@@ -3,11 +3,12 @@
 , runCommand
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
+, goPluginSupport ? true, buildGoModule, go
 , luaPluginSupport ? true, lua
 , ocamlPluginSupport ? true, ocaml
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
-, rustPluginSupport ? true, rustPlatform, cargo, rustc
+, rustPluginSupport ? true, rustc, rustPlatform, cargo
 , tclPluginSupport ? true, tcl
 , enableManpages ? true
 }: 
@@ -19,8 +20,14 @@ let
     rev = "v${version}";
     hash = "sha256-jJWknok8Mnd0+MDXzEoN/hNpgxDKeXMaGzZclQdDpuQ=";
   };
+  goDeps = (buildGoModule {
+    inherit src;
+    name = "${src.name}-go-deps";
+    modRoot = "plugins/go";
+    vendorSha256 = lib.fakeHash;
+  }).go-modules;
   cargoDeps = rustPlatform.fetchCargoTarball { 
-    src = runCommand "" {} ''
+    src = runCommand "${src.name}-rust-deps" {} ''
       mkdir -p $out
       cp -r ${src}/plugins/rust/. $out/
       cp $out/Cargo.lock.msrv $out/Cargo.lock
@@ -37,8 +44,9 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ 
     autoreconfHook pkg-config 
   ]
-    ++ lib.optionals ocamlPluginSupport [ ocaml ]
+    ++ lib.optionals goPluginSupport [ go ]
     ++ lib.optionals luaPluginSupport [ lua ]
+    ++ lib.optionals ocamlPluginSupport [ ocaml ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
     ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: [ p.boto3 p.google-cloud-storage ])) ]
     ++ lib.optionals rustPluginSupport [ rustPlatform.cargoSetupHook cargo rustc ]
@@ -85,4 +93,6 @@ stdenv.mkDerivation ({
   postUnpack = ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   '';
+} // lib.optionalAttrs goPluginSupport {
+  GOPROXY = "file://${goDeps}";
 })
