@@ -91,6 +91,7 @@ stdenv.mkDerivation ({
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
+    "--disable-libguestfs-tests"
   ] 
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
