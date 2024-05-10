@@ -84,5 +84,4 @@ stdenv.mkDerivation ({
   ];
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
-  sourceRoot = "plugins/rust";
 })
