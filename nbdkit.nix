@@ -84,7 +84,7 @@ stdenv.mkDerivation ({
   '';
 
   preCheck = ''
-    ls -R ${libnbd.python}
+    ls -R ${(python3.withPackages (p: lib.optionals additionalOptionalPlugins [ p.boto3 p.google-cloud-storage libnbd.python ]))}
     nbdsh
   '';
 
