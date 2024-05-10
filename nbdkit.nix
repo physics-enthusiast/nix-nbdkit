@@ -10,7 +10,7 @@
 , pythonPluginSupport ? true, python3
 , rustPluginSupport ? true, rustc, rustPlatform, cargo
 , tclPluginSupport ? true, tcl
-, additionalOptionalPlugins ? true, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost
+, additionalOptionalFeatures ? true, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, liblzma, zlib-ng
 , enableManpages ? true
 }: 
 let
@@ -43,7 +43,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals luaPluginSupport [ lua ]
     ++ lib.optionals ocamlPluginSupport [ ocaml ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
-    ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalPlugins [ p.boto3 p.google-cloud-storage (p.toPythonModule libnbd.python) ])) ]
+    ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalFeatures [ p.boto3 p.google-cloud-storage (p.toPythonModule libnbd.python) ])) ]
     ++ lib.optionals rustPluginSupport [ rustPlatform.cargoSetupHook cargo rustc ]
     ++ lib.optionals tclPluginSupport [ tcl ];
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ]
-    ++ lib.optionals additionalOptionalPlugins [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost ];
+    ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost liblzma zlib-ng ];
 
   postUnpack = lib.optionals goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
