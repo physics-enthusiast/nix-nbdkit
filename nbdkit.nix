@@ -25,7 +25,7 @@ let
     name = "${src.name}-go-deps";
     modRoot = "plugins/go";
     vendorSha256 = lib.fakeHash;
-  }).go-modules;
+  }).goModules;
   cargoDeps = rustPlatform.fetchCargoTarball { 
     src = runCommand "${src.name}-rust-deps" {} ''
       mkdir -p $out
