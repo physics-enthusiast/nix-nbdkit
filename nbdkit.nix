@@ -51,6 +51,15 @@ stdenv.mkDerivation ({
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
 
+  postUnpack = lib.optionals goPluginSupport ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH="$TMPDIR/go"
+    export GOPROXY=off
+    go run plugins/golang/config-test.go
+  '' + lib.optionals rustPluginSupport ''
+    cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
+  ''; 
+
   postPatch = lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '';
@@ -84,14 +93,4 @@ stdenv.mkDerivation ({
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
   cargoRoot = "plugins/rust";
-  postUnpack = ''
-    cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
-  '';
-} // lib.optionalAttrs goPluginSupport {
-  GOCACHE = "$TMPDIR/go-cache";
-  GOPATH = "$TMPDIR/go";
-  GOPROXY = "off";
-  postUnpack = ''
-    go run plugins/golang/config-test.go
-  '';
 })
