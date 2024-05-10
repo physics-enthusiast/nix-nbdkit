@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, pkg-config
+{ lib, stdenv, bash, autoreconfHook, pkg-config
 , fetchFromGitLab
 , runCommand
 , selinuxSupport ? stdenv.isLinux, libselinux
@@ -44,7 +44,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals rustPluginSupport [ rustPlatform.cargoSetupHook cargo rustc ]
     ++ lib.optionals tclPluginSupport [ tcl ];
 
-  buildInputs = []
+  buildInputs = [ bash ]
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
