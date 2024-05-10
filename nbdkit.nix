@@ -91,4 +91,7 @@ stdenv.mkDerivation ({
   GOCACHE = "$TMPDIR/go-cache";
   GOPATH = "$TMPDIR/go";
   GOPROXY = "off";
+  postUnpack = ''
+    go run plugins/golang/config-test.go
+  '';
 })
