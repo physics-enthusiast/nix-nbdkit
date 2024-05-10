@@ -23,6 +23,11 @@ let
     mkdir -p $out
     cp -r ${src}/${path}/. $out/
   '';
+  cargoDeps = rustPlatform.fetchCargoTarball { 
+    inherit src;
+    sourceRoot = "plugins/rust";
+    hash = lib.fakeHash; 
+  };
 in
 stdenv.mkDerivation {
   pname = "nbdkit";
@@ -48,7 +53,7 @@ stdenv.mkDerivation {
   postPatch = lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '' + lib.optionals rustPluginSupport ''
-    export cargoDeps=${rustPlatform.fetchCargoTarball { inherit src; hash = lib.fakeHash; }}
+    export cargoDeps=${cargoDeps}
   '';
 
   # Shell scripts with shebangs are ran during build
