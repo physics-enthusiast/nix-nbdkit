@@ -83,14 +83,19 @@ stdenv.mkDerivation ({
     ls -R $out
   '';
 
-  # Most language plugins are automatically turned on or off based on the
-  # presence of relevant dependencies and headers. However, to build the
-  # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
-  # perl plugins if perlPluginSupport is false but enableManpages is true
+  preCheck = ''
+    nbdsh
+  '';
+
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
-  ] ++ lib.optional (!perlPluginSupport && enableManpages) "-disable-perl";
+  ] 
+    # Most language plugins are automatically turned on or off based on the
+    # presence of relevant dependencies and headers. However, to build the
+    # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
+    # perl plugins if perlPluginSupport is false but enableManpages is true 
+    ++ lib.optional (!perlPluginSupport && enableManpages) "-disable-perl";
 
   doCheck = true;
 
