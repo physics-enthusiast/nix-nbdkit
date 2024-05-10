@@ -11,7 +11,7 @@
 , pythonPluginSupport ? true, python3
 , rustPluginSupport ? true, rustc, rustPlatform, cargo
 , tclPluginSupport ? true, tcl
-, additionalOptionalFeatures ? true, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng
+, additionalOptionalFeatures ? stdenv.isLinux, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng
 , enableManpages ? true
 }: 
 let
