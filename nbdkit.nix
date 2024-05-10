@@ -32,7 +32,7 @@ let
     hash = "sha256-3hnA0Ot6Q9lTnH+O5fmh2v2q7YMhmU5u75BlLwmF2Kk="; 
   };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   pname = "nbdkit";
   inherit version src;
 
@@ -55,8 +55,6 @@ stdenv.mkDerivation {
 
   postPatch = lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
-  '' + lib.optionals rustPluginSupport ''
-    export cargoDeps=${cargoDeps}
   '';
 
   # Shell scripts with shebangs are ran during build
@@ -84,4 +82,6 @@ stdenv.mkDerivation {
   ] ++ lib.optionals enableManpages [
     "man"
   ];
-}
+} // lib.optionalAttrs rustPluginSupport {
+  inherit cargoDeps;
+})
