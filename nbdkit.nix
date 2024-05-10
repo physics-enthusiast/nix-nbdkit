@@ -49,10 +49,6 @@ stdenv.mkDerivation ({
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
 
-  postUnpack = lib.optionals rustPluginSupport ''
-    cp plugins/rust/Cargo.lock.msrv plugins/rust/Cargo.lock
-  '';
-
   postPatch = lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '';
