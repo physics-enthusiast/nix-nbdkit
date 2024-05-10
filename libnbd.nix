@@ -10,12 +10,6 @@
 , fuse3
 , gnutls
 }:
-let
-  inherit (python3) pythonVersion;
-  isPy38OrNewer = lib.versionAtLeast pythonVersion "3.8";
-  libPrefix = "pypy${pythonVersion}";
-  sitePackages = "${lib.optionalString isPy38OrNewer "lib/${libPrefix}/"}site-packages";
-in
 stdenv.mkDerivation rec {
   pname = "libnbd";
   version = "1.18.2";
@@ -40,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-python-installdir=$out/${sitePackages}"
+    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
   ];
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
