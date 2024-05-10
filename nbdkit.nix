@@ -49,18 +49,18 @@ stdenv.mkDerivation ({
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
 
-  postPatch = ''
-    patchShebangs --build ./
-    patchShebangs --build ./tests
-  '' + lib.optionals ocamlPluginSupport ''
+  postPatch = lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '';
 
   # Shell scripts with shebangs are ran during build
   # so we patchShebang everything. Anything that ends 
   # up in the outputs will be patched again anyway. 
-  # For some reason patching the sources themselves
-  # seems to miss a few.
+  # Patching the sources themselves misses a couple of
+  # .sh.in files that aren't chmodded +x
+  postConfigure = ''
+    patchShebangs --build ./
+  '';
 
   # Most language plugins are automatically turned on or off based on the
   # presence of relevant dependencies and headers. However, to build the
