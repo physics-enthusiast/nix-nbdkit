@@ -80,4 +80,8 @@ stdenv.mkDerivation ({
   ];
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
+  cargoRoot = "plugins/rust";
+  postUnpack = ''
+    cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
+  '';
 })
