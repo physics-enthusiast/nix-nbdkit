@@ -25,7 +25,7 @@ let
   '';
   cargoDeps = rustPlatform.fetchCargoTarball { 
     inherit src;
-    sourceRoot = "plugins";
+    sourceRoot = "nbdkit/plugins";
     hash = lib.fakeHash; 
   };
 in
