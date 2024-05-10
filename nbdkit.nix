@@ -4,9 +4,10 @@
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 , luaPluginSupport ? true, lua
-, ocamlPluginSupport? true, ocaml
+, ocamlPluginSupport ? true, ocaml
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
+, rustPluginSupport ? true, rustPlatform
 , tclPluginSupport ? true, tcl
 , enableManpages ? true
 }: 
@@ -36,6 +37,7 @@ stdenv.mkDerivation {
     ++ lib.optionals luaPluginSupport [ lua ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
     ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: [ p.boto3 p.google-cloud-storage ])) ]
+    ++ lib.optionals rustPluginSupport [ rustPlatform.cargoSetupHook ]
     ++ lib.optionals tclPluginSupport [ tcl ];
 
   buildInputs = []
@@ -43,8 +45,10 @@ stdenv.mkDerivation {
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
 
-  postPatch = ''
+  postPatch = lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
+  '' + lib.optionals rustPluginSupport ''
+    export cargoDeps=${rustPlatform.fetchCargoTarball { inherit src; hash = lib.fakeHash; }}
   '';
 
   # Shell scripts with shebangs are ran during build
