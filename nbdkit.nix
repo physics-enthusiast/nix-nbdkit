@@ -1,5 +1,6 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
+, runCommand
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 , luaPluginSupport ? true, lua
