@@ -55,7 +55,7 @@ stdenv.mkDerivation ({
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
-    go run plugins/golang/config-test.go
+    go run source/plugins/golang/config-test.go
   '' + lib.optionals rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   ''; 
