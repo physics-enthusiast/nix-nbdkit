@@ -24,8 +24,10 @@ let
     cp -r ${src}/${path}/. $out/
   '';
   cargoDeps = rustPlatform.fetchCargoTarball { 
-    inherit src;
-    sourceRoot = "${src.name}/plugins/rust";
+    src = runCommand "" {} ''
+      cp -r ${src}/plugins/rust/. $out/
+      mv $out/Cargo.lock.Msrv $out/Cargo.lock
+    '';
     hash = lib.fakeHash; 
   };
 in
