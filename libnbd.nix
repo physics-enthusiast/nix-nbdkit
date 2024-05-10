@@ -34,10 +34,14 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
+    "--with-python-installdir=${placeholder "python"}/${python3.sitePackages}"
   ];
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
+
+  outputs = [
+    "out" "python"
+  ];
 
   meta = with lib; {
     homepage = "https://gitlab.com/nbdkit/libnbd";
