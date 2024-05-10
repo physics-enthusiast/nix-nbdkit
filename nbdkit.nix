@@ -26,7 +26,7 @@ let
   cargoDeps = rustPlatform.fetchCargoTarball { 
     src = runCommand "" {} ''
       cp -r ${src}/plugins/rust/. $out/
-      mv $out/Cargo.lock.Msrv $out/Cargo.lock
+      mv $out/Cargo.lock.msrv $out/Cargo.lock
     '';
     hash = lib.fakeHash; 
   };
