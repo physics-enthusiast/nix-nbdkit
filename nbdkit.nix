@@ -29,7 +29,7 @@ let
       cp -r ${src}/plugins/rust/. $out/
       mv $out/Cargo.lock.msrv $out/Cargo.lock
     '';
-    hash = lib.fakeHash; 
+    hash = "sha256-3hnA0Ot6Q9lTnH+O5fmh2v2q7YMhmU5u75BlLwmF2Kk="; 
   };
 in
 stdenv.mkDerivation {
