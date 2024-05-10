@@ -1,7 +1,7 @@
 { lib, stdenv, bash, autoreconfHook, pkg-config
 , fetchFromGitLab
 , runCommand
-, completionSupport ? bash-completion
+, completionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 , goPluginSupport ? true, go
