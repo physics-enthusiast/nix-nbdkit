@@ -1,6 +1,5 @@
 { lib, stdenv, autoreconfHook, pkg-config
 , fetchFromGitLab
-, runCommand
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 , luaPluginSupport ? true, lua
@@ -19,10 +18,6 @@ let
     rev = "v${version}";
     hash = "sha256-jJWknok8Mnd0+MDXzEoN/hNpgxDKeXMaGzZclQdDpuQ=";
   };
-  srcGetSubdir = path: runCommand "" {} ''
-    mkdir -p $out
-    cp -r ${src}/${path}/. $out/
-  '';
   cargoDeps = rustPlatform.fetchCargoTarball { 
     src = runCommand "" {} ''
       mkdir -p $out
@@ -84,4 +79,5 @@ stdenv.mkDerivation ({
   ];
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
+  cargoSetupPostPatchHook = "";
 })
