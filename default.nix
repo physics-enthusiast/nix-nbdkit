@@ -1,3 +1,4 @@
 { pkgs ? import <nixpkgs> {} }: rec {
-  nbdkit = pkgs.callPackage ./nbdkit.nix {};
+  libnbd = pkgs.callPackage ./libnbd.nix {};
+  nbdkit = pkgs.callPackage ./nbdkit.nix { inherit libnbd };
 }
