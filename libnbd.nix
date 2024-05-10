@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-python-installdir=${placeholder "python"}/${python3.sitePackages}"
+    "--with-python-installdir=${placeholder "python"}"
   ];
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
