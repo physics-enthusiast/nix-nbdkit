@@ -24,7 +24,7 @@ let
     inherit src;
     name = "${src.name}-go-deps";
     modRoot = "plugins/go";
-    vendorSha256 = lib.fakeHash;
+    vendorHash = lib.fakeHash;
   }).goModules;
   cargoDeps = rustPlatform.fetchCargoTarball { 
     src = runCommand "${src.name}-rust-deps" {} ''
