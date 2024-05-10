@@ -84,6 +84,7 @@ stdenv.mkDerivation ({
   '';
 
   preCheck = ''
+    ls -R ${libnbd.python}
     nbdsh
   '';
 
