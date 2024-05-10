@@ -44,7 +44,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals rustPluginSupport [ rustPlatform.cargoSetupHook cargo rustc ]
     ++ lib.optionals tclPluginSupport [ tcl ];
 
-  buildInputs = [ bash ]
+  buildInputs = []
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
