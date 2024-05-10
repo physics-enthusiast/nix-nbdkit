@@ -10,6 +10,7 @@
 , pythonPluginSupport ? true, python3
 , rustPluginSupport ? true, rustc, rustPlatform, cargo
 , tclPluginSupport ? true, tcl
+, additionalOptionalPlugins ? true, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar
 , enableManpages ? true
 }: 
 let
@@ -42,14 +43,15 @@ stdenv.mkDerivation ({
     ++ lib.optionals luaPluginSupport [ lua ]
     ++ lib.optionals ocamlPluginSupport [ ocaml ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
-    ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: [ p.boto3 p.google-cloud-storage ])) ]
+    ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalPlugins [ p.boto3 p.google-cloud-storage ])) ]
     ++ lib.optionals rustPluginSupport [ rustPlatform.cargoSetupHook cargo rustc ]
     ++ lib.optionals tclPluginSupport [ tcl ];
 
   buildInputs = []
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
-    ++ lib.optionals tlsSupport [ gnutls ];
+    ++ lib.optionals tlsSupport [ gnutls ]
+    ++ lib.optionals additionalOptionalPlugins [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar ];
 
   postUnpack = lib.optionals goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
@@ -72,6 +74,10 @@ stdenv.mkDerivation ({
   # .sh.in files that aren't chmodded +x
   postConfigure = ''
     patchShebangs --build ./
+  '';
+
+  postInstall = ''
+    ls -R $out
   '';
 
   # Most language plugins are automatically turned on or off based on the
