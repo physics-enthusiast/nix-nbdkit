@@ -3,7 +3,7 @@
 , runCommand
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
-, goPluginSupport ? true, buildGoModule, go
+, goPluginSupport ? true, go
 , luaPluginSupport ? true, lua
 , ocamlPluginSupport ? true, ocaml
 , perlPluginSupport ? true, perl, libxcrypt
@@ -20,12 +20,6 @@ let
     rev = "v${version}";
     hash = "sha256-jJWknok8Mnd0+MDXzEoN/hNpgxDKeXMaGzZclQdDpuQ=";
   };
-  goDeps = (buildGoModule {
-    inherit src;
-    name = "${src.name}-go-deps";
-    modRoot = "plugins/golang";
-    vendorHash = lib.fakeHash;
-  }).goModules;
   cargoDeps = rustPlatform.fetchCargoTarball { 
     src = runCommand "${src.name}-rust-deps" {} ''
       mkdir -p $out
@@ -94,5 +88,9 @@ stdenv.mkDerivation ({
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   '';
 } // lib.optionalAttrs goPluginSupport {
-  GOPROXY = "file://${goDeps}";
+  postUnpack = ''
+    export GOCACHE=$TMPDIR/go-cache
+    export GOPATH="$TMPDIR/go"
+    export GOPROXY=off
+  '';
 })
