@@ -39,6 +39,15 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
+  postInstall = ''
+    mkdir -p ${placeholder "python"}/${python3.sitePackages}/nbd-${version}.dist-info
+    cat <<EOT >> ${placeholder "python"}/${python3.sitePackages}/nbd-${version}.dist-info/METADATA
+      Metadata-Version: 2.1
+      Name: nbd
+      Version: ${version}
+    EOT
+  '';
+
   outputs = [
     "out" "python"
   ];
