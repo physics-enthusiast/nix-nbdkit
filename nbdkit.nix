@@ -23,7 +23,7 @@ let
     src = runCommand "" {} ''
       mkdir -p $out
       cp -r ${src}/plugins/rust/. $out/
-      mv $out/Cargo.lock.msrv $out/Cargo.lock
+      cp $out/Cargo.lock.msrv $out/Cargo.lock
     '';
     hash = "sha256-3hnA0Ot6Q9lTnH+O5fmh2v2q7YMhmU5u75BlLwmF2Kk="; 
   };
@@ -48,6 +48,10 @@ stdenv.mkDerivation ({
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
+
+  postUnpack = lib.optionals rustPluginSupport ''
+    cp -r plugins/rust/Cargo.lock.msrv plugins/rust/Cargo.lock
+  '';
 
   postPatch = lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
@@ -80,5 +84,5 @@ stdenv.mkDerivation ({
   ];
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
-  cargoSetupPostPatchHook = "";
+  sourceRoot = "plugins/rust";
 })
