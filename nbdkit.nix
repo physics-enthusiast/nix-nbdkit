@@ -10,7 +10,7 @@
 , pythonPluginSupport ? true, python3
 , rustPluginSupport ? true, rustc, rustPlatform, cargo
 , tclPluginSupport ? true, tcl
-, additionalOptionalPlugins ? true, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, qemu
+, additionalOptionalPlugins ? true, curl, libguestfs-with-appliance, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, qemu
 , enableManpages ? true
 }: 
 let
@@ -51,7 +51,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ]
-    ++ lib.optionals additionalOptionalPlugins [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost ];
+    ++ lib.optionals additionalOptionalPlugins [ curl libguestfs-with-appliance libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost ];
 
   nativeCheckInputs = []
     ++ lib.optionals additionalOptionalPlugins [ qemu ];
