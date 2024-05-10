@@ -50,7 +50,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals tlsSupport [ gnutls ];
 
   postPatch = ''
-    patchShebangs --build $PWD
+    patchShebangs --build ./
   '' + lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '';
