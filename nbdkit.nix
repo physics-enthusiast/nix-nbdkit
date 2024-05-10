@@ -43,7 +43,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals luaPluginSupport [ lua ]
     ++ lib.optionals ocamlPluginSupport [ ocaml ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
-    ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalPlugins [ p.boto3 p.google-cloud-storage libnbd.python ])) ]
+    ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalPlugins [ p.boto3 p.google-cloud-storage (p.toPythonModule libnbd.python) ])) ]
     ++ lib.optionals rustPluginSupport [ rustPlatform.cargoSetupHook cargo rustc ]
     ++ lib.optionals tclPluginSupport [ tcl ];
 
