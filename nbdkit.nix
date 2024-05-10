@@ -23,7 +23,7 @@ let
   goDeps = (buildGoModule {
     inherit src;
     name = "${src.name}-go-deps";
-    modRoot = "plugins/go";
+    modRoot = "plugins/golang";
     vendorHash = lib.fakeHash;
   }).goModules;
   cargoDeps = rustPlatform.fetchCargoTarball { 
