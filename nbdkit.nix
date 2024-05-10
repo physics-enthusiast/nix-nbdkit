@@ -88,9 +88,7 @@ stdenv.mkDerivation ({
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   '';
 } // lib.optionalAttrs goPluginSupport {
-  postUnpack = ''
-    export GOCACHE=$TMPDIR/go-cache
-    export GOPATH="$TMPDIR/go"
-    export GOPROXY=off
-  '';
+  GOCACHE = "$TMPDIR/go-cache";
+  GOPATH = "$TMPDIR/go";
+  GOPROXY = "off";
 })
