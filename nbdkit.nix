@@ -49,7 +49,9 @@ stdenv.mkDerivation ({
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ];
 
-  postPatch = lib.optionals ocamlPluginSupport ''
+  postPatch = ''
+    patchShebangs --build source
+  '' + lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '';
 
@@ -58,9 +60,6 @@ stdenv.mkDerivation ({
   # up in the outputs will be patched again anyway. 
   # For some reason patching the sources themselves
   # seems to miss a few.
-  postConfigure = ''
-    patchShebangs --build /build
-  '';
 
   # Most language plugins are automatically turned on or off based on the
   # presence of relevant dependencies and headers. However, to build the
