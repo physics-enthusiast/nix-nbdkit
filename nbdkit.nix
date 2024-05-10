@@ -50,7 +50,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals tlsSupport [ gnutls ];
 
   postUnpack = lib.optionals rustPluginSupport ''
-    cp -r plugins/rust/Cargo.lock.msrv plugins/rust/Cargo.lock
+    cp plugins/rust/Cargo.lock.msrv plugins/rust/Cargo.lock
   '';
 
   postPatch = lib.optionals ocamlPluginSupport ''
