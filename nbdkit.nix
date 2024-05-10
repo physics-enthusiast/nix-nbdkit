@@ -51,6 +51,7 @@ stdenv.mkDerivation ({
 
   postPatch = ''
     patchShebangs --build ./
+    patchShebangs --build ./tests
   '' + lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '';
