@@ -10,7 +10,7 @@
 , pythonPluginSupport ? true, python3
 , rustPluginSupport ? true, rustc, rustPlatform, cargo
 , tclPluginSupport ? true, tcl
-, additionalOptionalPlugins ? true, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar
+, additionalOptionalPlugins ? true, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost
 , enableManpages ? true
 }: 
 let
@@ -51,7 +51,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ]
-    ++ lib.optionals additionalOptionalPlugins [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar ];
+    ++ lib.optionals additionalOptionalPlugins [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost ];
 
   postUnpack = lib.optionals goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
