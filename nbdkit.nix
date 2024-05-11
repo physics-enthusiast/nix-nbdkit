@@ -85,7 +85,7 @@ stdenv.mkDerivation ({
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
-  ] ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_clock_gettime=no" ]
+  ] ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_fdatasync=no" ]
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
