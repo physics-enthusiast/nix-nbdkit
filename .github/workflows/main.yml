@@ -19,4 +19,4 @@ jobs:
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
       - run: |
-          nix build -L -f default.nix nbdkit
+          nix build -L -I nixpkgs=https://github.com/reckenrode/nixpkgs/archive/ld64.tar.gz -f default.nix nbdkit
