@@ -17,10 +17,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-      - name: Set Swap Space
-        uses: pierotofy/set-swap-space@master
-        with:
-          swap-size-gb: 16
       - name: Install Nix
         uses: DeterminateSystems/nix-installer-action@main
       - run: |
