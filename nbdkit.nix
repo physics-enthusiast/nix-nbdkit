@@ -9,7 +9,7 @@
 , ocamlPluginSupport ? true, ocaml
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
-, rustPluginSupport ? true, rustc, rustPlatform, cargo
+, rustPluginSupport ? true, rustc, rustPlatform, cargo, libiconv
 , tclPluginSupport ? true, tcl
 , additionalOptionalFeatures ? stdenv.isLinux, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng
 , enableManpages ? true
@@ -45,7 +45,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals ocamlPluginSupport [ ocaml ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
     ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalFeatures [ p.boto3 p.google-cloud-storage (p.toPythonModule libnbd.python) ])) ]
-    ++ lib.optionals rustPluginSupport [ rustPlatform.cargoSetupHook cargo rustc ]
+    ++ lib.optionals rustPluginSupport ([ rustPlatform.cargoSetupHook cargo rustc ] ++ lib.optionals stdenv.isDarwin [ libiconv ])
     ++ lib.optionals tclPluginSupport [ tcl ];
 
   buildInputs = []
