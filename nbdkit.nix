@@ -55,7 +55,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals tlsSupport [ gnutls ]
     ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng ];
 
-  postUnpack = lib.optionals goPluginSupport ''
+  postUnpack = "" + lib.optionals goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
@@ -64,7 +64,7 @@ stdenv.mkDerivation ({
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   ''; 
 
-  postPatch = lib.optionals ocamlPluginSupport ''
+  postPatch = "" + lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '' + lib.optionals stdenv.isDarwin ''
     rm plugins/example3/Makefile.am
