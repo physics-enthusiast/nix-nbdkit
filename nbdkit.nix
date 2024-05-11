@@ -66,9 +66,6 @@ stdenv.mkDerivation ({
 
   postPatch = lib.optionalString ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
-  '' + lib.optionalString stdenv.isDarwin ''
-    rm plugins/example3/Makefile.am
-    touch plugins/example3/Makefile.am
   '';
 
   # Shell scripts with shebangs are ran during build
@@ -88,12 +85,12 @@ stdenv.mkDerivation ({
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
-  ] 
+  ] ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_clock_gettime=no" ]
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
     # perl plugins if perlPluginSupport is false but enableManpages is true 
-    ++ lib.optional (!perlPluginSupport && enableManpages) "--disable-perl";
+    ++ lib.optionals (!perlPluginSupport && enableManpages) [ "--disable-perl" ];
 
   installFlags = []
     ++ lib.optionals completionSupport [ "bashcompdir=$(out)/share/bash-completion/completions" ];
