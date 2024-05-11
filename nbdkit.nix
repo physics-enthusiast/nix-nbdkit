@@ -66,6 +66,9 @@ stdenv.mkDerivation ({
 
   postPatch = lib.optionals ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
+  '' + lib.optionals stdenv.isDarwin ''
+    rm plugins/example3/Makefile.am
+    touch plugins/example3/Makefile.am
   '';
 
   # Shell scripts with shebangs are ran during build
