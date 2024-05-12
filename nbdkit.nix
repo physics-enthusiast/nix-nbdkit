@@ -89,6 +89,12 @@ stdenv.mkDerivation ({
     # tries to detect the presence of fdatasync. Hence, inclusion of the replacement function is not
     # triggered. Force it off.
     ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_fdatasync=no" ]
+    # open_memstream is injected via CFLAGS and LD in pkgs/development/libraries/memstream/setup-hook.sh
+    # This is invisible to configure which detects it as missing and attempts to find a substitution
+    # during AC_REPLACE_FUNCS. One is in fact defined, but was intended for windows, so it throws.
+    # We override the check manually since we know it will be available during actual compilation.
+    # This is specific to x86_64-darwin. See nixpkgs/pkgs/os-specific/darwin/cctools/port.nix for more info.
+    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ "ac_cv_func_open_memstream=yes" ]
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
