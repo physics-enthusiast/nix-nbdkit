@@ -86,10 +86,14 @@ stdenv.mkDerivation ({
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
   ]
-    # Apparently there's a MacOS syscall with the same name causing false positives when configure.ac
-    # tries to detect the presence of fdatasync. Hence, inclusion of the replacement function is not
-    # triggered. Force it off.
-    ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_fdatasync=no" ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Apparently there's a MacOS syscall with the same name causing false positives when configure.ac
+      # tries to detect the presence of fdatasync. Hence, inclusion of the replacement function is not
+      # triggered. Force it off.
+      "ac_cv_func_fdatasync=no"
+      # https://github.com/NixOS/nixpkgs/issues/19098
+      "--disable-lto"
+      ]
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
@@ -109,7 +113,4 @@ stdenv.mkDerivation ({
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
   cargoRoot = "plugins/rust";
-} // lib.optionalAttrs stdenv.isDarwin {
-    # https://github.com/NixOS/nixpkgs/issues/19098
-    buildFlags = [ "--disable-lto" ];
 })
