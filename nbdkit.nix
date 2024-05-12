@@ -71,6 +71,10 @@ stdenv.mkDerivation ({
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocaml.version}/site-lib/\"|g"
   '';
 
+  preConfigure = lib.optionalString ocamlPluginSupport ''
+    AS="${stdenv.cc}/bin/cc -c" ASPP="${stdenv.cc}/bin/cc -c"
+  '';
+
   # Shell scripts with shebangs are ran during build
   # so we patchShebang everything --build. Anything
   # that ends up in the outputs will be patched again
