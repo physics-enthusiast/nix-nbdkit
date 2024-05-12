@@ -4,15 +4,18 @@
 , completionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
-, goPluginSupport ? true, go
+# https://gitlab.com/nbdkit/nbdkit/-/commit/a3a2f9a46054ab45ce170f92344eea1e801d9892
+, goPluginSupport ? stdenv.isLinux, go
 , luaPluginSupport ? true, lua
 , ocamlPluginSupport ? true, ocaml
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
-, rustPluginSupport ? true, rustc, rustPlatform, cargo, libiconv
+# https://gitlab.com/nbdkit/nbdkit/-/commit/f935260cc50265e1f89e95ae4ca275b43d38f128
+, rustPluginSupport ? stdenv.isLinux, rustc, rustPlatform, cargo, libiconv
 , tclPluginSupport ? true, tcl
 , additionalOptionalFeatures ? stdenv.isLinux, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng
 , enableManpages ? true
+, memstreamHook
 }: 
 let
   version = "1.39.4";
@@ -53,7 +56,8 @@ stdenv.mkDerivation ({
     ++ lib.optionals completionSupport [ bash-completion ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ]
-    ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng ];
+    ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng ]
+    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
 
   postUnpack = lib.optionalString goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
@@ -94,9 +98,6 @@ stdenv.mkDerivation ({
   installFlags = []
     ++ lib.optionals completionSupport [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
-  # https://github.com/NixOS/nixpkgs/issues/19098
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && stdenv.isDarwin) "-fno-lto";
-
   doCheck = false;
 
   outputs = [
@@ -107,7 +108,4 @@ stdenv.mkDerivation ({
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
   cargoRoot = "plugins/rust";
-} // lib.optionalAttrs (stdenv.cc.isClang && stdenv.isDarwin) {
-  env.CARGO_PROFILE_RELEASE_LTO = "off";
-  env.NIX_CFLAGS_COMPILE = "-fno-lto";
 })
