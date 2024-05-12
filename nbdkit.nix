@@ -88,7 +88,6 @@ stdenv.mkDerivation ({
         # more details
         --replace 'requires guestfish --version' 'exit 0'
     done
-
   '';
 
   configureFlags = [
