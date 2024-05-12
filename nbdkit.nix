@@ -7,7 +7,7 @@
 # https://gitlab.com/nbdkit/nbdkit/-/commit/a3a2f9a46054ab45ce170f92344eea1e801d9892
 , goPluginSupport ? stdenv.isLinux, go
 , luaPluginSupport ? true, lua
-, ocamlPluginSupport ? true, ocaml, opam
+, ocamlPluginSupport ? true, ocamlPackages
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
 # https://gitlab.com/nbdkit/nbdkit/-/commit/f935260cc50265e1f89e95ae4ca275b43d38f128
@@ -45,7 +45,7 @@ stdenv.mkDerivation ({
   ]
     ++ lib.optionals goPluginSupport [ go ]
     ++ lib.optionals luaPluginSupport [ lua ]
-    ++ lib.optionals ocamlPluginSupport [ ocaml opam ]
+    ++ lib.optionals ocamlPluginSupport [ ocamlPackages.ocaml ]
     ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
     ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalFeatures [ p.boto3 p.google-cloud-storage (p.toPythonModule libnbd.python) ])) ]
     ++ lib.optionals rustPluginSupport ([ rustPlatform.cargoSetupHook cargo rustc ] ++ lib.optionals stdenv.isDarwin [ libiconv ])
