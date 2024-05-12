@@ -15,7 +15,7 @@
 , tclPluginSupport ? true, tcl
 , additionalOptionalFeatures ? stdenv.isLinux, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng
 , enableManpages ? true
-, memstreamHook
+, memorymappingHook, memstreamHook
 }: 
 let
   version = "1.39.4";
@@ -57,7 +57,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ]
     ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
+    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook memorymappingHook ];
 
   postUnpack = lib.optionalString goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
