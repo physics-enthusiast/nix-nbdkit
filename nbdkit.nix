@@ -79,14 +79,17 @@ stdenv.mkDerivation ({
   # .sh.in files that aren't chmodded +x
   postConfigure = ''
     patchShebangs --build ./
+    # Backward compatability tests done by upstream. We skip them both because we don't need them, and
+    # because they contain precompiled binaries.
+    # See https://gitlab.com/nbdkit/nbdkit/-/tree/master/tests/old-plugins
+    rm -rf tests/old-plugins/
     for test_file in $(find ./tests -type f -print); do
       # First replacement patches shebangs in function body. Second deals with tests that implicitly require
       # a libguestfs appliance but are not disabled by --disable-libguestfs-tests, and just causes them to
       # directly exit successfully. See the comments on --disable-libguestfs-tests for more details
       substituteInPlace "$test_file" \
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
-        --replace-quiet 'requires guestfish --version' 'exit 0' \
-        || echo "Binary detected, skipping"
+        --replace-quiet 'requires guestfish --version' 'exit 0'
     done
   '';
 
