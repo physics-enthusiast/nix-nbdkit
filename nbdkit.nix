@@ -76,8 +76,6 @@ stdenv.mkDerivation ({
   # .sh.in files that aren't chmodded +x
   postConfigure = ''
     patchShebangs --build ./
-  '' + lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile --replace "-flto" ""
   '';
 
   postInstall = ''
@@ -100,15 +98,6 @@ stdenv.mkDerivation ({
 
   installFlags = []
     ++ lib.optionals completionSupport [ "bashcompdir=$(out)/share/bash-completion/completions" ];
-
-
-  NIX_CFLAGS_COMPILE = []
-    # LTO fails on MacOS due to #19098. This can be removed when #307880 gets merged.
-    ++ lib.optionals stdenv.isDarwin [ "-fno-lto" ];
-
-  NIX_CFLAGS_LINK = []
-    # See NIX_CFLAGS_COMPILE
-    ++ lib.optionals stdenv.isDarwin [ "-fno-lto" ];
 
   doCheck = false;
 
