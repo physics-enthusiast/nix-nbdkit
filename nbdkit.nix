@@ -7,7 +7,7 @@
 # https://gitlab.com/nbdkit/nbdkit/-/commit/a3a2f9a46054ab45ce170f92344eea1e801d9892
 , goPluginSupport ? stdenv.isLinux, go
 , luaPluginSupport ? true, lua
-, ocamlPluginSupport ? true, ocamlPackages
+, ocamlPluginSupport ? true, ocaml-ng
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
 # https://gitlab.com/nbdkit/nbdkit/-/commit/f935260cc50265e1f89e95ae4ca275b43d38f128
@@ -33,6 +33,7 @@ let
     '';
     hash = "sha256-3hnA0Ot6Q9lTnH+O5fmh2v2q7YMhmU5u75BlLwmF2Kk="; 
   };
+  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
 in
 stdenv.mkDerivation ({
   pname = "nbdkit";
