@@ -91,7 +91,7 @@ stdenv.mkDerivation ({
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
         --replace-quiet 'out=' 'other_out=' \
         --replace-quiet '$out' '$other_out' \
-        --replace-quiet 'requires guestfish --version' 'exit 0' \
+        --replace-quiet 'requires guestfish --version' 'exit 0'
     done
   '';
 
