@@ -110,5 +110,5 @@ stdenv.mkDerivation ({
   cargoBuildFlags = lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
     "--config"
     "profile.release.lto=\"off\""
-  ]
+  ];
 })
