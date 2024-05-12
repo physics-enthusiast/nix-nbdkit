@@ -13,7 +13,7 @@
 # https://gitlab.com/nbdkit/nbdkit/-/commit/f935260cc50265e1f89e95ae4ca275b43d38f128
 , rustPluginSupport ? stdenv.isLinux, rustc, rustPlatform, cargo, libiconv
 , tclPluginSupport ? true, tcl
-, additionalOptionalFeatures ? stdenv.isLinux, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng, qemu, util-linux
+, additionalOptionalFeatures ? stdenv.isLinux, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng, qemu
 , enableManpages ? true
 , memorymappingHook, memstreamHook
 }: 
@@ -56,7 +56,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals completionSupport [ bash-completion ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ]
-    ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng qemu util-linux ]
+    ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng qemu ]
     ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook memorymappingHook ];
 
   postUnpack = lib.optionalString goPluginSupport ''
