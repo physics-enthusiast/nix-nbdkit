@@ -93,7 +93,7 @@ stdenv.mkDerivation ({
       "ac_cv_func_fdatasync=no"
       # https://github.com/NixOS/nixpkgs/issues/19098
       "--disable-lto"
-      ]
+    ]
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
