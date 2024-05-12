@@ -123,4 +123,4 @@ stdenv.mkDerivation ({
 } // lib.optionalAttrs stdenv.isDarwin {
     # https://github.com/NixOS/nixpkgs/issues/19098
     buildFlags = [ "--disable-lto" ];
-});
+})
