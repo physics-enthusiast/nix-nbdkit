@@ -120,4 +120,7 @@ stdenv.mkDerivation ({
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
   cargoRoot = "plugins/rust";
-})
+} // lib.optionalAttrs stdenv.isDarwin {
+    # https://github.com/NixOS/nixpkgs/issues/19098
+    buildFlags = [ "--disable-lto" ];
+});
