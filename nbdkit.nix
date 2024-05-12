@@ -59,7 +59,6 @@ stdenv.mkDerivation ({
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
-    go run source/plugins/golang/config-test.go
   '' + lib.optionalString rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   ''; 
@@ -78,22 +77,14 @@ stdenv.mkDerivation ({
     patchShebangs --build ./
   '';
 
-  postInstall = ''
-    ls -R $out
-  '';
-
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
   ]
-    ++ lib.optionals stdenv.isDarwin [
-      # Apparently there's a MacOS syscall with the same name causing false positives when configure.ac
-      # tries to detect the presence of fdatasync. Hence, inclusion of the replacement function is not
-      # triggered. Force it off.
-      "ac_cv_func_fdatasync=no"
-      # https://github.com/NixOS/nixpkgs/issues/19098
-      "--disable-lto"
-    ]
+    # Apparently there's a MacOS syscall with the same name causing false positives when configure.ac
+    # tries to detect the presence of fdatasync. Hence, inclusion of the replacement function is not
+    # triggered. Force it off.
+    ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_fdatasync=no" ]
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
@@ -102,6 +93,9 @@ stdenv.mkDerivation ({
 
   installFlags = []
     ++ lib.optionals completionSupport [ "bashcompdir=$(out)/share/bash-completion/completions" ];
+
+  # https://github.com/NixOS/nixpkgs/issues/19098
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.cc.isClang && stdenv.isDarwin) "-fno-lto";
 
   doCheck = false;
 
