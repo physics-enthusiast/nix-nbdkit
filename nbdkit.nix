@@ -79,13 +79,13 @@ stdenv.mkDerivation ({
   # .sh.in files that aren't chmodded +x
   postConfigure = ''
     patchShebangs --build ./
-    for test_file in $(find . -type f -print); do
+    for test_file in $(find ./tests -type f -print); do
       # First replacement patches shebangs in function body. Second deals with tests that implicitly require
       # a libguestfs appliance but are not disabled by --disable-libguestfs-tests, and just causes them to
       # directly exit successfully. See the comments on --disable-libguestfs-tests for more details
       substituteInPlace "$test_file" \
-        --replace '/usr/bin/env bash' '${bash}/bin/bash' \
-        --replace 'requires guestfish --version' 'exit 0'
+        --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
+        --replace-quiet 'requires guestfish --version' 'exit 0'
     done
   '';
 
