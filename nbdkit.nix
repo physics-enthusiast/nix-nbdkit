@@ -107,8 +107,5 @@ stdenv.mkDerivation ({
 } // lib.optionalAttrs rustPluginSupport {
   inherit cargoDeps;
   cargoRoot = "plugins/rust";
-  cargoBuildFlags = lib.optionals (stdenv.cc.isClang && stdenv.isDarwin) [
-    "--config"
-    "profile.release.lto=\"off\""
-  ];
+  env.CARGO_PROFILE_RELEASE_LTO = lib.optionalString (stdenv.cc.isClang && stdenv.isDarwin) "off";
 })
