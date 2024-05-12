@@ -85,7 +85,11 @@ stdenv.mkDerivation ({
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
-  ] ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_fdatasync=no" ]
+  ]
+    # Apparently there's a MacOS syscall with the same name causing false positives when configure.ac
+    # tries to detect the presence of fdatasync. Hence, inclusion of the replacement function is not
+    # triggered. Force it off.
+    ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_fdatasync=no" ]
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
     # docs, perl has to be a nativeBuildInput. Hence, explicitly disable
@@ -94,6 +98,15 @@ stdenv.mkDerivation ({
 
   installFlags = []
     ++ lib.optionals completionSupport [ "bashcompdir=$(out)/share/bash-completion/completions" ];
+
+
+  NIX_CFLAGS_COMPILE = []
+    # LTO fails on MacOS due to #19098. This can be removed when #307880 gets merged.
+    ++ lib.optionals stdenv.isDarwin [ "-fno-lto" ];
+
+  NIX_CFLAGS_LINK = []
+    # See NIX_CFLAGS_COMPILE
+    ++ lib.optionals stdenv.isDarwin [ "-fno-lto" ];
 
   doCheck = false;
 
