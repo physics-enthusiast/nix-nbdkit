@@ -113,7 +113,7 @@ stdenv.mkDerivation ({
   installFlags = []
     ++ lib.optionals completionSupport [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
-  doCheck = false;
+  doCheck = true;
 
   outputs = [
     "out" "dev"
