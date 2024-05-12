@@ -129,6 +129,6 @@ stdenv.mkDerivation ({
   inherit cargoDeps;
   cargoRoot = "plugins/rust";
 } // lib.optionalAttrs (stdenv.isDarwin && ocamlPluginSupport) {
-	NIX_CFLAGS_COMPILE="-g -O2 -I/opt/local/include" \
-	NIX_LDFLAGS="-L/opt/local/lib"
+  NIX_CFLAGS_COMPILE="-g -O2 -I/opt/local/include";
+  NIX_LDFLAGS="-L/opt/local/lib";
 })
