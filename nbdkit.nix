@@ -109,4 +109,5 @@ stdenv.mkDerivation ({
   cargoRoot = "plugins/rust";
 } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.isDarwin) {
   env.CARGO_PROFILE_RELEASE_LTO = "off";
+  env.NIX_CFLAGS_COMPILE = "-fno-lto";
 })
