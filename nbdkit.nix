@@ -80,7 +80,7 @@ stdenv.mkDerivation ({
   postConfigure = ''
     patchShebangs --build ./
     for test_file in $(find . -type f -print); do
-      substituteInPlace $test_file \
+      substituteInPlace "$test_file" \
         # Shebangs in function body
         --replace '/usr/bin/env bash' '${bash}/bin/bash' \
         # These tests implicitly require a libguestfs appliance but are not disabled by --disable-libguestfs-tests
