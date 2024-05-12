@@ -79,21 +79,30 @@ stdenv.mkDerivation ({
   # .sh.in files that aren't chmodded +x
   postConfigure = ''
     patchShebangs --build ./
+    substituteInPlace ./tests/* \
+      # Shebangs in function body
+      --replace '/usr/bin/env bash' '${bash}/bin/bash' \
+      # These tests implicitly require a libguestfs appliance but are not disabled by --disable-libguestfs-tests
+      # so just cause them to directly exit successfully. See the comments on --disable-libguestfs-tests for
+      # more details
+      --replace 'requires guestfish --version' 'exit 0'
   '';
 
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
+    # Same problem as #37540, would rather not bundle a downloaded binary so just disable the tests instead
+    "--disable-libguestfs-tests"
   ]
     # Apparently there's a MacOS syscall with the same name causing false positives when configure.ac
     # tries to detect the presence of fdatasync. Hence, inclusion of the replacement function is not
-    # triggered. Force it off.
+    # triggered. Force it off
     ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_fdatasync=no" ]
     # open_memstream is injected via CFLAGS and LD in pkgs/development/libraries/memstream/setup-hook.sh
     # This is invisible to configure which detects it as missing and attempts to find a substitution
     # during AC_REPLACE_FUNCS. One is in fact defined, but was intended for windows, so it throws.
     # We override the check manually since we know it will be available during actual compilation.
-    # This is specific to x86_64-darwin. See nixpkgs/pkgs/os-specific/darwin/cctools/port.nix for more info.
+    # This is specific to x86_64-darwin. See nixpkgs/pkgs/os-specific/darwin/cctools/port.nix for more info
     ++ lib.optionals (stdenv.system == "x86_64-darwin") [ "ac_cv_func_open_memstream=yes" ]
     # Most language plugins are automatically turned on or off based on the
     # presence of relevant dependencies and headers. However, to build the
