@@ -76,6 +76,8 @@ stdenv.mkDerivation ({
   # .sh.in files that aren't chmodded +x
   postConfigure = ''
     patchShebangs --build ./
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile --replace "-flto" ""
   '';
 
   postInstall = ''
