@@ -1,6 +1,6 @@
 { lib, stdenv, bash, autoreconfHook, pkg-config, which
 , fetchFromGitLab
-, runCommand, runCommandCC
+, runCommand
 , completionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
@@ -32,36 +32,6 @@ let
       cp $out/Cargo.lock.msrv $out/Cargo.lock
     '';
     hash = "sha256-3hnA0Ot6Q9lTnH+O5fmh2v2q7YMhmU5u75BlLwmF2Kk="; 
-  };
-  test = stdenv.mkDerivation {
-    pname = "nbdkit-test";
-    inherit version src;
-
-    enableParallelBuilding = true;
-
-    nativeBuildInputs = [ 
-      autoreconfHook pkg-config 
-    ]
-      ++ lib.optionals goPluginSupport [ go ]
-      ++ lib.optionals luaPluginSupport [ lua ]
-      ++ lib.optionals ocamlPluginSupport [ ocamlPackages.ocaml ocamlPackages.findlib ocamlPackages.ocamlbuild ]
-      ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
-      ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalFeatures [ p.boto3 p.google-cloud-storage (p.toPythonModule libnbd.python) ])) ]
-      ++ lib.optionals rustPluginSupport ([ rustPlatform.cargoSetupHook cargo rustc ] ++ lib.optionals stdenv.isDarwin [ libiconv ])
-      ++ lib.optionals tclPluginSupport [ tcl ];
-
-  buildInputs = [
-    which
-  ]
-    ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
-    ++ lib.optionals completionSupport [ bash-completion ]
-    ++ lib.optionals selinuxSupport [ libselinux ]
-    ++ lib.optionals tlsSupport [ gnutls ];
-
-    postUnpack = ''
-      echo "testing the assembler"
-      cc -c -o 'test.o' '${./test.s}'
-    '';
   };
 in
 stdenv.mkDerivation ({
@@ -97,10 +67,7 @@ stdenv.mkDerivation ({
     export GOPROXY=off
   '' + lib.optionalString rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
-  '' + ''
-    echo 'print_endline "test"' > conftest.ml
-    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { ls ${test}; cat conftest.s; ${stdenv.cc}/bin/cc -c -o 'conftest.o' 'conftest.s'; }
-  '' ; 
+  ''; 
 
   postPatch = lib.optionalString ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g"
