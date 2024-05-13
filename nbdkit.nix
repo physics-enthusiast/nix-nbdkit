@@ -67,7 +67,10 @@ stdenv.mkDerivation ({
     export GOPROXY=off
   '' + lib.optionalString rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
-  ''; 
+  '' + ''
+    echo 'print_endline "test"' > conftest.ml
+    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { ls ${test}; cat conftest.s; ${stdenv.cc}/bin/cc -c -o 'conftest.o' 'conftest.s'; }
+  '';
 
   postPatch = lib.optionalString ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g"
