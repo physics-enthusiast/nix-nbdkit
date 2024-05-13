@@ -93,8 +93,7 @@ stdenv.mkDerivation ({
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
         --replace-quiet 'requires guestfish --version' 'exit 0'
     for src_file in $(find . -type f -print); do
-      substituteInPlace "$src_file" \
-        --replace-quiet '-runtime-variant _pic' ""
+      substituteInPlace "$src_file" --replace-quiet "-runtime-variant _pic" ""
     done
   '';
 
