@@ -42,7 +42,13 @@ let
     nativeBuildInputs = [ 
       autoreconfHook pkg-config 
     ]
-      ++ lib.optionals ocamlPluginSupport [ ocamlPackages.ocaml ocamlPackages.findlib ocamlPackages.ocamlbuild ];
+      ++ lib.optionals goPluginSupport [ go ]
+      ++ lib.optionals luaPluginSupport [ lua ]
+      ++ lib.optionals ocamlPluginSupport [ ocamlPackages.ocaml ocamlPackages.findlib ocamlPackages.ocamlbuild ]
+      ++ lib.optionals perlPluginSupport [ libxcrypt perl ]
+      ++ lib.optionals pythonPluginSupport [ (python3.withPackages (p: lib.optionals additionalOptionalFeatures [ p.boto3 p.google-cloud-storage (p.toPythonModule libnbd.python) ])) ]
+      ++ lib.optionals rustPluginSupport ([ rustPlatform.cargoSetupHook cargo rustc ] ++ lib.optionals stdenv.isDarwin [ libiconv ])
+      ++ lib.optionals tclPluginSupport [ tcl ];
 
     postUnpack = ''
       cc -c -o 'test.o' '${./test.s}'
