@@ -1,4 +1,4 @@
-{ gcc9, lib, stdenv, bash, autoreconfHook, pkg-config, which
+{ lib, stdenv, bash, autoreconfHook, pkg-config, which
 , fetchFromGitLab
 , runCommand
 , completionSupport ? true, bash-completion
@@ -69,7 +69,6 @@ stdenv.mkDerivation ({
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   '' + ''
     echo 'print_endline "test"' > conftest.ml
-    export OCAMLOPTFLAGS="-cc ${gcc9}/bin/cc"
     ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { cat conftest.s; ${stdenv.cc}/bin/cc -c -o 'conftest.o' 'conftest.s'; }
   '' ; 
 
