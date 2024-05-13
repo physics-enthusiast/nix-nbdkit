@@ -41,7 +41,8 @@ let
 
     nativeBuildInputs = [ 
       autoreconfHook pkg-config 
-    ];
+    ]
+      ++ lib.optionals ocamlPluginSupport [ ocamlPackages.ocaml ocamlPackages.findlib ocamlPackages.ocamlbuild ];
 
     postUnpack = ''
       cc -c -o 'test.o' '${./test.s}'
