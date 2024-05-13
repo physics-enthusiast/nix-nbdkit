@@ -68,7 +68,7 @@ stdenv.mkDerivation ({
   '' + lib.optionalString rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   '' + ''
-    echo "\"test\"" >> conftest.ml
+    echo 'print_endline "test"' > conftest.ml
     ocamlopt -verbose conftest.ml
   '' ; 
 
