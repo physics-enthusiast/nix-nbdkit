@@ -56,7 +56,7 @@ let
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals completionSupport [ bash-completion ]
     ++ lib.optionals selinuxSupport [ libselinux ]
-    ++ lib.optionals tlsSupport [ gnutls ]
+    ++ lib.optionals tlsSupport [ gnutls ];
 
     postUnpack = ''
       echo "testing the assembler"
