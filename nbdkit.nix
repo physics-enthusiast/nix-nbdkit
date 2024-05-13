@@ -33,9 +33,20 @@ let
     '';
     hash = "sha256-3hnA0Ot6Q9lTnH+O5fmh2v2q7YMhmU5u75BlLwmF2Kk="; 
   };
-  test = runCommandCC "" {} ''
-    cc -c -o 'test.o' '${./test.s}'
-  '';
+  test = stdenv.mkDerivation {
+    pname = "nbdkit-test";
+    inherit version src;
+
+    enableParallelBuilding = true;
+
+    nativeBuildInputs = [ 
+      autoreconfHook pkg-config 
+    ];
+
+    postUnpack = ''
+      cc -c -o 'test.o' '${./test.s}'
+    '';
+  };
 in
 stdenv.mkDerivation ({
   pname = "nbdkit";
