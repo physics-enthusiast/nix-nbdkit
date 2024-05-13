@@ -1,4 +1,4 @@
-{ lib, stdenv, bash, autoreconfHook, pkg-config
+{ lib, stdenv, bash, autoreconfHook, pkg-config, which
 , fetchFromGitLab
 , runCommand
 , completionSupport ? true, bash-completion
@@ -7,7 +7,7 @@
 # https://gitlab.com/nbdkit/nbdkit/-/commit/a3a2f9a46054ab45ce170f92344eea1e801d9892
 , goPluginSupport ? stdenv.isLinux, go
 , luaPluginSupport ? true, lua
-, ocamlPluginSupport ? true, ocaml-ng
+, ocamlPluginSupport ? true, ocamlPackages
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
 # https://gitlab.com/nbdkit/nbdkit/-/commit/f935260cc50265e1f89e95ae4ca275b43d38f128
@@ -33,7 +33,6 @@ let
     '';
     hash = "sha256-3hnA0Ot6Q9lTnH+O5fmh2v2q7YMhmU5u75BlLwmF2Kk="; 
   };
-  ocamlPackages = ocaml-ng.ocamlPackages_4_14;
 in
 stdenv.mkDerivation ({
   pname = "nbdkit";
@@ -52,7 +51,7 @@ stdenv.mkDerivation ({
     ++ lib.optionals rustPluginSupport ([ rustPlatform.cargoSetupHook cargo rustc ] ++ lib.optionals stdenv.isDarwin [ libiconv ])
     ++ lib.optionals tclPluginSupport [ tcl ];
 
-  buildInputs = []
+  buildInputs = [ which ]
     ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
     ++ lib.optionals completionSupport [ bash-completion ]
     ++ lib.optionals selinuxSupport [ libselinux ]
