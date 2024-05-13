@@ -1,6 +1,6 @@
 { lib, stdenv, bash, autoreconfHook, pkg-config, which
 , fetchFromGitLab
-, runCommand
+, runCommand, runCommandCC
 , completionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
@@ -33,6 +33,9 @@ let
     '';
     hash = "sha256-3hnA0Ot6Q9lTnH+O5fmh2v2q7YMhmU5u75BlLwmF2Kk="; 
   };
+  test = runCommandCC "" {} ''
+    cc -c -o 'test.o' '${./test.s}'
+  '';
 in
 stdenv.mkDerivation ({
   pname = "nbdkit";
@@ -69,7 +72,7 @@ stdenv.mkDerivation ({
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   '' + ''
     echo 'print_endline "test"' > conftest.ml
-    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { cat conftest.s; ${stdenv.cc}/bin/cc -c -o 'conftest.o' 'conftest.s'; }
+    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { ls ${test}; cat conftest.s; ${stdenv.cc}/bin/cc -c -o 'conftest.o' 'conftest.s'; }
   '' ; 
 
   postPatch = lib.optionalString ocamlPluginSupport ''
