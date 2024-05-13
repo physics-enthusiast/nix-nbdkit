@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     # The hook uses this rather than the regular header because -include on clang is indiscriminate
     # and affects .s (lowercase) assembly code files as well.
-    (echo '#ifndef __ASSEMBLY__'; cat memstream.h; echo '#endif') > memstream_asm_compat.h
+    (echo '#ifndef __ASSEMBLER__'; cat memstream.h; echo '#endif') > memstream_asm_compat.h
   '';
 
   installPhase = ''
