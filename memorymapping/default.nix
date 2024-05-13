@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     runHook postBuild
   '';
 
-  postBuild = ''
+  preInstall = ''
     # The hook uses this rather than the regular header because -include on clang is indiscriminate
     # and affects .s (lowercase) assembly code files as well.
     (echo '#ifndef __ASSEMBLY__'; cat src/fmemopen.h; echo '#endif') > fmemopen_asm_compat.h
