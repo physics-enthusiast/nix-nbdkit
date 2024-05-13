@@ -50,7 +50,18 @@ let
       ++ lib.optionals rustPluginSupport ([ rustPlatform.cargoSetupHook cargo rustc ] ++ lib.optionals stdenv.isDarwin [ libiconv ])
       ++ lib.optionals tclPluginSupport [ tcl ];
 
+  buildInputs = [
+    which
+  ]
+    ++ lib.optionals enableManpages [ (perl.withPackages (p: [ p.PodSimple ])) ]
+    ++ lib.optionals completionSupport [ bash-completion ]
+    ++ lib.optionals selinuxSupport [ libselinux ]
+    ++ lib.optionals tlsSupport [ gnutls ]
+    ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng qemu ]
+    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook memorymappingHook ];
+
     postUnpack = ''
+      echo "testing the assembler"
       cc -c -o 'test.o' '${./test.s}'
     '';
   };
