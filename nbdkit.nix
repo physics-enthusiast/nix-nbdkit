@@ -69,7 +69,7 @@ stdenv.mkDerivation ({
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   '' + ''
     echo "\"test\"" >> conftest.ml
-    ocamlopt -output-obj -runtime-variant _pic -o conftest.so conftest.ml
+    ocamlopt -verbose -ccopt -v -cclib -v -output-obj -runtime-variant _pic -o conftest.so conftest.ml
   '' ; 
 
   postPatch = lib.optionalString ocamlPluginSupport ''
