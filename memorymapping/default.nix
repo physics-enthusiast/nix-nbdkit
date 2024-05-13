@@ -19,11 +19,14 @@ stdenv.mkDerivation {
     $CC -c src/fmemopen.c
     $AR rcs libmemorymapping.a fmemopen.o
     sed -e '1i#include <stdio.h>' -i src/fmemopen.h
-    (echo '#ifndef __ASSEMBLY__'; cat src/fmemopen.h; echo '#endif') > temp
-    cp temp src/fmemopen.h
-    rm temp
 
     runHook postBuild
+  '';
+
+  postBuild = ''
+    # The hook uses this rather than the regular header because -include on clang is indiscriminate
+    # and affects .s (lowercase) assembly code files as well.
+    (echo '#ifndef __ASSEMBLY__'; cat src/fmemopen.h; echo '#endif') > fmemopen_asm_compat.h
   '';
 
   installPhase = ''
@@ -31,6 +34,7 @@ stdenv.mkDerivation {
 
     install -D libmemorymapping.a "$out"/lib/libmemorymapping.a
     install -D src/fmemopen.h "$out"/include/fmemopen.h
+    install -D fmemopen_asm_compat.h "$out"/include/fmemopen_asm_compat.h
 
     runHook postInstall
   '';
