@@ -69,7 +69,7 @@ stdenv.mkDerivation ({
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
   '' + ''
     echo 'print_endline "test"' > conftest.ml
-    ocamlopt -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { cat conftest.s; cc -c  -o 'conftest.o' 'conftest.s'; }
+    ocamlopt -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { cat conftest.s; cc -c -o 'conftest.o' 'conftest.s'; }
   '' ; 
 
   postPatch = lib.optionalString ocamlPluginSupport ''
