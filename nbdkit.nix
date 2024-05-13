@@ -61,17 +61,12 @@ stdenv.mkDerivation ({
     ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng qemu ]
     ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook memorymappingHook ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-fno-pic" "-Qunused-arguments" ]);
-
   postUnpack = lib.optionalString goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
   '' + lib.optionalString rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
-  '' + ''
-    echo 'print_endline "test"' > conftest.ml
-    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml
   '';
 
   postPatch = lib.optionalString ocamlPluginSupport ''
@@ -97,6 +92,9 @@ stdenv.mkDerivation ({
       substituteInPlace "$test_file" \
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
         --replace-quiet 'requires guestfish --version' 'exit 0'
+    for src_file in $(find . -type f -print); do
+      substituteInPlace "$src_file" \
+        --replace-quiet '-runtime-variant _pic' ""
     done
   '';
 
