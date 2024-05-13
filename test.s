@@ -101,4 +101,5 @@ L105:
 L106:
         .set L$set$3, (L105 - .) + 0
         .long   L$set$3
-        .ascii  " 
+        .ascii  "Conftest\0"
+        .align  3
