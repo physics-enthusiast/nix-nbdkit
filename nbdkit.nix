@@ -70,7 +70,7 @@ stdenv.mkDerivation ({
   '' + ''
     echo 'print_endline "test"' > conftest.ml
     export OCAMLOPTFLAGS="-cc ${gcc9}/bin/cc"
-    ocamlopt -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { cat conftest.s; ${stdenv.cc}/bin/cc -c -o 'conftest.o' 'conftest.s'; }
+    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml || { cat conftest.s; ${stdenv.cc}/bin/cc -c -o 'conftest.o' 'conftest.s'; }
   '' ; 
 
   postPatch = lib.optionalString ocamlPluginSupport ''
