@@ -98,7 +98,7 @@ stdenv.mkDerivation ({
     done
   '';
 
-  env.OCAMLOPTFLAGS = "-ccopt -L‘ocamlc -where‘ -ccopt -lunix -ccopt -lasmrun";
+  env.OCAMLOPTFLAGS = "-ccopt -L$(ocamlc -where) -ccopt -lunix -ccopt -lasmrun";
 
   configureFlags = [
     # Diagnostic info requested by upstream
