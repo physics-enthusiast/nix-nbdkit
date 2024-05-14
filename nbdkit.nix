@@ -65,11 +65,12 @@ stdenv.mkDerivation ({
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
+  '' + lib.optionalString ocamlPluginSupport ''
+    echo 'print_endline "test"' > conftest.ml
+    export OCAMLOPTFLAGS="-ccopt -L$(ocamlc -where) -ccopt -lunix -ccopt -lasmrun"
+    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml
   '' + lib.optionalString rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
-  '' + ''
-    echo 'print_endline "test"' > conftest.ml
-    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml
   '';
 
   postPatch = lib.optionalString ocamlPluginSupport ''
@@ -97,8 +98,6 @@ stdenv.mkDerivation ({
         --replace-quiet 'requires guestfish --version' 'exit 0'
     done
   '';
-
-  env.OCAMLOPTFLAGS = "-ccopt -L$(ocamlc -where) -ccopt -lunix -ccopt -lasmrun";
 
   configureFlags = [
     # Diagnostic info requested by upstream
