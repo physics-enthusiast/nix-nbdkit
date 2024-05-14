@@ -67,6 +67,9 @@ stdenv.mkDerivation ({
     export GOPROXY=off
   '' + lib.optionalString rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
+  '' + ''
+    echo 'print_endline "test"' > conftest.ml
+    ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml
   '';
 
   postPatch = lib.optionalString ocamlPluginSupport ''
@@ -91,7 +94,7 @@ stdenv.mkDerivation ({
       # directly exit successfully. See the comments on --disable-libguestfs-tests for more details
       substituteInPlace "$test_file" \
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
-        --replace-quiet 'requires guestfish --version' 'exit 0' \
+        --replace-quiet 'requires guestfish --version' 'exit 0'
     done
   '';
 
