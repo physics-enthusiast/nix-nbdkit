@@ -91,15 +91,11 @@ stdenv.mkDerivation ({
       # directly exit successfully. See the comments on --disable-libguestfs-tests for more details
       substituteInPlace "$test_file" \
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
-        --replace-quiet 'requires guestfish --version' 'exit 0'
-    done
-    for src_file in $(find . -type f -print); do
-      # First replacement patches shebangs in function body. Second deals with tests that implicitly require
-      # a libguestfs appliance but are not disabled by --disable-libguestfs-tests, and just causes them to
-      # directly exit successfully. See the comments on --disable-libguestfs-tests for more details
-      substituteInPlace "$src_file" \
+        --replace-quiet 'requires guestfish --version' 'exit 0' \
         --replace-quiet 'output-obj' 'output-complete-obj'
     done
+    substituteInPlace plugins/ocaml/Makefile.am \
+      --replace-quiet 'output-obj' 'output-complete-obj'
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
