@@ -98,12 +98,6 @@ stdenv.mkDerivation ({
       --replace-quiet 'output-obj' 'output-complete-obj'
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
-    mv $out/bin/nbdkit $out/bin/nbdkit-unwrapped
-    makeWrapper $out/bin/nbdkit-unwrapped $out/bin/nbdkit \
-      --prefix DYLD_FALLBACK_LIBRARY_PATH : "${lib.makeLibraryPath [ ocamlPackages.ocaml ocamlPackages.findlib ocamlPackages.ocamlbuild ]}"
-  '';
-
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
