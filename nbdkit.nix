@@ -96,7 +96,7 @@ stdenv.mkDerivation ({
       substituteInPlace "$test_file" \
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
         --replace-quiet 'requires guestfish --version' 'exit 0' \
-        --replace-quiet '-lnbdkitocaml' '-lnbdkitocaml -ccopt -L$(ocamlc -where) -ccopt -lasmrun_pic -ccopt -flat_namespace'
+        --replace-quiet '-lnbdkitocaml' "-lnbdkitocaml -ccopt -L$(ocamlc -where) -ccopt -lasmrun_pic -ccopt -flat_namespace"
     done
   '';
 
