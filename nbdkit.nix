@@ -91,7 +91,8 @@ stdenv.mkDerivation ({
       # directly exit successfully. See the comments on --disable-libguestfs-tests for more details
       substituteInPlace "$test_file" \
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
-        --replace-quiet 'requires guestfish --version' 'exit 0'
+        --replace-quiet 'requires guestfish --version' 'exit 0' \
+        --replace-quiet 'output-obj' 'output-complete-obj'
     done
     substituteInPlace plugins/ocaml/Makefile.am \
       --replace-quiet 'output-obj' 'output-complete-obj'
