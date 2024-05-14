@@ -94,8 +94,6 @@ stdenv.mkDerivation ({
         --replace-quiet 'requires guestfish --version' 'exit 0' \
         --replace-quiet 'output-obj' 'output-complete-obj'
     done
-    substituteInPlace plugins/ocaml/Makefile.am \
-      --replace-quiet 'output-obj' 'output-complete-obj'
   '';
 
   configureFlags = [
