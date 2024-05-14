@@ -97,7 +97,7 @@ stdenv.mkDerivation ({
   postInstall = lib.optionalString stdenv.isDarwin ''
     mv $out/bin/nbdkit $out/bin/nbdkit-unwrapped
     makeWrapper $out/bin/nbdkit-unwrapped $out/bin/nbdkit \
-      --prefix DYLD_FALLBACK_LIBRARY_PATH : "${lib.makeLibraryPath (buildInputs ++ nativeBuildInputs)}"
+      --prefix DYLD_FALLBACK_LIBRARY_PATH : "${lib.makeLibraryPath [ ocamlPackages.ocaml ocamlPackages.findlib ocamlPackages.ocamlbuild ]}"
   '';
 
   configureFlags = [
