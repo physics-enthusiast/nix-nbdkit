@@ -100,7 +100,7 @@ stdenv.mkDerivation ({
     done
   '';
 
-  postBuild = lib.optionalString stdenv.isDarwin ''
+  postBuild = ''
     nm ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_shared.so | grep startup
     mv $out/bin/nbdkit $out/bin/nbdkit-unwrapped
     makeWrapper $out/bin/nbdkit-unwrapped $out/bin/nbdkit \
