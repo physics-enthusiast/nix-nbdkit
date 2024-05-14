@@ -92,9 +92,12 @@ stdenv.mkDerivation ({
       substituteInPlace "$test_file" \
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
         --replace-quiet 'requires guestfish --version' 'exit 0'
-    for src_file in $(find . -type f -print); do
-      substituteInPlace "$src_file" --replace-quiet "-runtime-variant _pic" ""
-    done
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mv $out/bin/nbdkit $out/bin/nbdkit-unwrapped
+    makeWrapper $out/bin/nbdkit-unwrapped $out/bin/nbdkit \
+      --prefix DYLD_FALLBACK_LIBRARY_PATH : "${lib.makeLibraryPath (buildInputs ++ nativeBuildInputs)}"
   '';
 
   configureFlags = [
