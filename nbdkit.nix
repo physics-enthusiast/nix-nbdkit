@@ -102,6 +102,7 @@ stdenv.mkDerivation ({
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mv $out/sbin/nbdkit $out/sbin/nbdkit-unwrapped
+    cat ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_pic.a |grep startup
     makeWrapper $out/bin/nbdkit-unwrapped $out/bin/nbdkit \
       --prefix DYLD_LIBRARY_PATH : "${ocamlPackages.ocaml}/lib/ocaml"
   '';
