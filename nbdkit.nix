@@ -103,6 +103,7 @@ stdenv.mkDerivation ({
     mv $out/sbin/nbdkit $out/sbin/nbdkit-unwrapped
     makeWrapper $out/bin/nbdkit-unwrapped $out/bin/nbdkit \
       --prefix DYLD_LIBRARY_PATH : "${ocamlPackages.ocaml}/lib/ocaml"
+  '';
 
   configureFlags = [
     # Diagnostic info requested by upstream
