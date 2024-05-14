@@ -93,6 +93,13 @@ stdenv.mkDerivation ({
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
         --replace-quiet 'requires guestfish --version' 'exit 0'
     done
+    for src_file in $(find . -type f -print); do
+      # First replacement patches shebangs in function body. Second deals with tests that implicitly require
+      # a libguestfs appliance but are not disabled by --disable-libguestfs-tests, and just causes them to
+      # directly exit successfully. See the comments on --disable-libguestfs-tests for more details
+      substituteInPlace "$src_file" \
+        --replace-quiet 'output-obj' 'output-complete-obj'
+    done
   '';
 
   postInstall = lib.optionalString stdenv.isDarwin ''
