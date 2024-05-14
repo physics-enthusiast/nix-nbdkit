@@ -67,7 +67,7 @@ stdenv.mkDerivation ({
     export GOPROXY=off
   '' + lib.optionalString ocamlPluginSupport ''
     echo 'print_endline "test"' > conftest.ml
-    export OCAMLOPTFLAGS="-ccopt -L$(ocamlc -where) -ccopt -lasmrun_pic"
+    export OCAMLOPTFLAGS="-ccopt -L$(ocamlc -where) -ccopt -lasmrun_pic -ccopt -flat_namespace"
     ocamlopt $OCAMLOPTFLAGS -verbose -S -output-obj -runtime-variant _pic -o conftest.so conftest.ml
   '' + lib.optionalString rustPluginSupport ''
     cp source/plugins/rust/Cargo.lock.msrv source/plugins/rust/Cargo.lock
