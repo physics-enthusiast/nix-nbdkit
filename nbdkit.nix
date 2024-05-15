@@ -63,7 +63,7 @@ stdenv.mkDerivation ({
 
   checkInputs = []
     ++ lib.optionals tlsSupport [ cacert ]
-    ++ lib.optionals additionalOptionalFeatures [ qemu ]
+    ++ lib.optionals additionalOptionalFeatures [ qemu ];
 
   postUnpack = lib.optionalString goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
