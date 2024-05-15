@@ -74,7 +74,10 @@ stdenv.mkDerivation ({
   '';
 
   postPatch = lib.optionalString ocamlPluginSupport ''
-    sed -i plugins/ocaml/Makefile.am -e "s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g"
+    sed -i plugins/ocaml/Makefile.am -e "
+      s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g
+      83ilibnbdkitocaml_la_LIBADD = -lasmrun_shared
+    "
   '';
 
   # Shell scripts with shebangs are ran during build
@@ -95,16 +98,8 @@ stdenv.mkDerivation ({
       # directly exit successfully. See the comments on --disable-libguestfs-tests for more details
       substituteInPlace "$test_file" \
         --replace-quiet '/usr/bin/env bash' '${bash}/bin/bash' \
-        --replace-quiet 'requires guestfish --version' 'exit 0' \
-        --replace-quiet '-lnbdkitocaml' "-lnbdkitocaml -ccopt -L$(ocamlc -where) -ccopt -lasmrun_pic -ccopt -flat_namespace"
+        --replace-quiet 'requires guestfish --version' 'exit 0'
     done
-  '';
-
-  postBuild = ''
-    nm ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_shared.so | grep startup
-    mv $out/bin/nbdkit $out/bin/nbdkit-unwrapped
-    makeWrapper $out/bin/nbdkit-unwrapped $out/bin/nbdkit \
-      --prefix DYLD_LIBRARY_PATH : "${ocamlPackages.ocaml}/lib/ocaml"
   '';
 
   configureFlags = [
