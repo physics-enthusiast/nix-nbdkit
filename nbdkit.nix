@@ -3,7 +3,7 @@
 , runCommand
 , completionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
-, tlsSupport ? true, gnutls
+, tlsSupport ? true, gnutls, cacert
 # https://gitlab.com/nbdkit/nbdkit/-/commit/a3a2f9a46054ab45ce170f92344eea1e801d9892
 , goPluginSupport ? stdenv.isLinux, go
 , luaPluginSupport ? true, lua
@@ -58,8 +58,12 @@ stdenv.mkDerivation ({
     ++ lib.optionals completionSupport [ bash-completion ]
     ++ lib.optionals selinuxSupport [ libselinux ]
     ++ lib.optionals tlsSupport [ gnutls ]
-    ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng qemu ]
+    ++ lib.optionals additionalOptionalFeatures [ curl libguestfs libisoburn libvirt e2fsprogs libnbd libssh libtorrent-rasterbar boost lzma zlib-ng ]
     ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook memorymappingHook ];
+
+  checkInputs = []
+    ++ lib.optionals tlsSupport [ cacert ]
+    ++ lib.optionals additionalOptionalFeatures [ qemu ]
 
   postUnpack = lib.optionalString goPluginSupport ''
     export GOCACHE=$TMPDIR/go-cache
