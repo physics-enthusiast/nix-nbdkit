@@ -74,8 +74,8 @@ stdenv.mkDerivation ({
       s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g
       83ilibnbdkitocaml_la_LIBADD = ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_pic.a
     "
-    sed -i plugins/rust/Cargo.toml -e '
-      17icrate-type = ["rlib"]
+    sed -i plugins/rust/Cargo.lock -e '
+      167icrate-type = ["rlib"]
     '
   '';
 
