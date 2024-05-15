@@ -11,7 +11,7 @@
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
 # https://gitlab.com/nbdkit/nbdkit/-/commit/f935260cc50265e1f89e95ae4ca275b43d38f128
-, rustPluginSupport ? stdenv.isLinux, rustc, rustPlatform, cargo, libiconv
+, rustPluginSupport ? true, rustc, rustPlatform, cargo, libiconv
 , tclPluginSupport ? true, tcl
 , additionalOptionalFeatures ? stdenv.isLinux, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng, qemu
 , enableManpages ? true
@@ -73,6 +73,9 @@ stdenv.mkDerivation ({
     sed -i plugins/ocaml/Makefile.am -e "
       s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g
       83ilibnbdkitocaml_la_LIBADD = ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_pic.a
+    "
+    sed -i plugins/rust/Makefile.am -e "
+      s|cargo build|cargo build --crate-type=rlib|
     "
   '';
 
