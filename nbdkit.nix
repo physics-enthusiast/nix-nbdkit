@@ -76,7 +76,7 @@ stdenv.mkDerivation ({
   postPatch = lib.optionalString ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "
       s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g
-      83ilibnbdkitocaml_la_LIBADD = -L${ocamlPackages.ocaml}/lib/ocaml -lasmrun_shared
+      83ilibnbdkitocaml_la_LDADD = ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_pic.a
     "
   '';
 
