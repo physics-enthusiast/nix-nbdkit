@@ -3,7 +3,7 @@
 , runCommand
 , completionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
-, tlsSupport ? true, gnutls, cacert
+, tlsSupport ? true, gnutls
 # https://gitlab.com/nbdkit/nbdkit/-/commit/a3a2f9a46054ab45ce170f92344eea1e801d9892
 , goPluginSupport ? stdenv.isLinux, go
 , luaPluginSupport ? true, lua
@@ -62,7 +62,6 @@ stdenv.mkDerivation ({
     ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook memorymappingHook ];
 
   checkInputs = []
-    ++ lib.optionals tlsSupport [ cacert ]
     ++ lib.optionals additionalOptionalFeatures [ qemu ];
 
   postUnpack = lib.optionalString goPluginSupport ''
