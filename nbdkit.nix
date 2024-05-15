@@ -105,7 +105,7 @@ stdenv.mkDerivation ({
     done
   '';
 
-  # use a dummy cert like the gnutls derivation does (the very same one, in fact) to avoid depending on
+  # Use a dummy cert like the gnutls derivation does (the very same one, in fact) to avoid depending on
   # cacert (which would cause a rebuild of this package whenever the certs are updated), since they
   # are only needed for tests
   preCheck = "export NIX_SSL_CERT_FILE=${./dummy.crt}";
