@@ -106,6 +106,8 @@ stdenv.mkDerivation ({
     done
   '';
 
+  preCheck = "export NIX_SSL_CERT_FILE=${./dummy.crt}";
+
   configureFlags = [
     # Diagnostic info requested by upstream
     "--with-extra='Nixpkgs'"
