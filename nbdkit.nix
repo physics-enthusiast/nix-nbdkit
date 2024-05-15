@@ -74,9 +74,9 @@ stdenv.mkDerivation ({
       s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g
       83ilibnbdkitocaml_la_LIBADD = ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_pic.a
     "
-    sed -i plugins/rust/Makefile.am -e "
-      s|cargo build|cargo rustc --crate-type=rlib|
-    "
+    sed -i plugins/rust/Cargo.toml -e '
+      17icrate-type = ["rlib"]
+    '
   '';
 
   # Shell scripts with shebangs are ran during build
