@@ -75,7 +75,7 @@ stdenv.mkDerivation ({
       83ilibnbdkitocaml_la_LIBADD = ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_pic.a
     "
     sed -i plugins/rust/Makefile.am -e "
-      s|cargo build|cargo rustc build --crate-type=rlib|
+      s|cargo build|cargo rustc --crate-type=rlib|
     "
   '';
 
