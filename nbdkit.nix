@@ -4,7 +4,6 @@
 , completionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
-# https://gitlab.com/nbdkit/nbdkit/-/commit/a3a2f9a46054ab45ce170f92344eea1e801d9892
 , goPluginSupport ? true, go
 , luaPluginSupport ? true, lua
 , ocamlPluginSupport ? true, ocamlPackages
