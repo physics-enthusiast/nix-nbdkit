@@ -5,7 +5,7 @@
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
 # https://gitlab.com/nbdkit/nbdkit/-/commit/a3a2f9a46054ab45ce170f92344eea1e801d9892
-, goPluginSupport ? stdenv.isLinux, go
+, goPluginSupport ? true, go
 , luaPluginSupport ? true, lua
 , ocamlPluginSupport ? true, ocamlPackages
 , perlPluginSupport ? true, perl, libxcrypt
