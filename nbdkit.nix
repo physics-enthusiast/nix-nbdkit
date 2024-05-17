@@ -6,7 +6,7 @@
 , tlsSupport ? true, gnutls
 , goPluginSupport ? !stdenv.isBSD, go
 , luaPluginSupport ? true, lua
-, ocamlPluginSupport ? true, ocamlPackages
+, ocamlPluginSupport ? !stdenv.isBSD, ocamlPackages
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
 # https://gitlab.com/nbdkit/nbdkit/-/commit/f935260cc50265e1f89e95ae4ca275b43d38f128
