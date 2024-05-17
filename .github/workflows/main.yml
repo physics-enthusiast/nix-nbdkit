@@ -25,11 +25,11 @@ jobs:
   test-bsd:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: vmactions/freebsd-vm@v1
+      - uses: cross-platform-actions/action@v0.23.0
         with:
-          usesh: true
-          prepare: |
-            pkg install -y nix
+          operating_system: freebsd
+          version: '14.0'
+          shell: bash
           run: |
+            pkg install -y nix
             nix --experimental-features nix-command build -I nixpkgs=https://github.com/rhelmot/nixpkgs/archive/freebsd-minimal.tar.gz -L -f default.nix nbdkit
