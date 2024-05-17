@@ -10,7 +10,7 @@
 , perlPluginSupport ? true, perl, libxcrypt
 , pythonPluginSupport ? true, python3
 # https://gitlab.com/nbdkit/nbdkit/-/commit/f935260cc50265e1f89e95ae4ca275b43d38f128
-, rustPluginSupport ? true, rustc, rustPlatform, cargo, libiconv
+, rustPluginSupport ? !stdenv.isBSD, rustc, rustPlatform, cargo, libiconv
 , tclPluginSupport ? true, tcl
 , additionalOptionalFeatures ? stdenv.isLinux, curl, libguestfs, libisoburn, libvirt, e2fsprogs, libnbd, libssh, libtorrent-rasterbar, boost, lzma, zlib-ng, qemu
 , enableManpages ? true
