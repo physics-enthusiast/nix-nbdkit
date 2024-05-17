@@ -32,5 +32,4 @@ jobs:
           prepare: |
             pkg install -y nix
           run: |
-            export NIXPKGS_ALLOW_UNSUPPORTED_SYSTEM=1
             nix --experimental-features nix-command build -I nixpkgs=https://github.com/rhelmot/nixpkgs/archive/freebsd-minimal.tar.gz -L -f default.nix nbdkit
