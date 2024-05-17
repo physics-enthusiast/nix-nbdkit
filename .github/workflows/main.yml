@@ -32,4 +32,4 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y nix
-            nix --experimental-features nix-command build -I nixpkgs=https://github.com/rhelmot/nixpkgs/archive/freebsd-minimal.tar.gz -L -f default.nix nbdkit
+            sudo nix --experimental-features nix-command build -I nixpkgs=https://github.com/rhelmot/nixpkgs/archive/freebsd-minimal.tar.gz -L -f default.nix nbdkit
