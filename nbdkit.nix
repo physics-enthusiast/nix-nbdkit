@@ -4,7 +4,7 @@
 , completionSupport ? true, bash-completion
 , selinuxSupport ? stdenv.isLinux, libselinux
 , tlsSupport ? true, gnutls
-, goPluginSupport ? true, go
+, goPluginSupport ? !stdenv.isBSD, go
 , luaPluginSupport ? true, lua
 , ocamlPluginSupport ? true, ocamlPackages
 , perlPluginSupport ? true, perl, libxcrypt
