@@ -31,5 +31,5 @@ jobs:
           version: '14.0'
           shell: bash
           run: |
-            pkg install -y nix
+            sudo pkg install -y nix
             nix --experimental-features nix-command build -I nixpkgs=https://github.com/rhelmot/nixpkgs/archive/freebsd-minimal.tar.gz -L -f default.nix nbdkit
