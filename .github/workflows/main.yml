@@ -33,4 +33,6 @@ jobs:
           shell: bash
           run: |
             sudo pkg install -y nix
-            sudo nix --experimental-features nix-command build -I nixpkgs=https://github.com/rhelmot/nixpkgs/archive/freebsd-staging.tar.gz -L -f default.nix nbdkit
+            echo "experimental-features = nix-command flakes auto-allocate-uids configurable-impure-env" >> nix.conf
+            export NIX_USER_CONF_FILES=$(readlink ./nix.conf):$NIX_USER_CONF_FILES
+            sudo nix build -I nixpkgs=https://github.com/rhelmot/nixpkgs/archive/freebsd-staging.tar.gz -L -f default.nix nbdkit
