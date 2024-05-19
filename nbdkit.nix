@@ -19,9 +19,9 @@
 let
   version = "1.39.4";
   src = fetchFromGitLab {
-    owner = "nbdkit";
+    owner = "physics-enthusiast";
     repo = "nbdkit";
-    rev = "v${version}";
+    rev = "test";
     hash = "sha256-jJWknok8Mnd0+MDXzEoN/hNpgxDKeXMaGzZclQdDpuQ=";
   };
   cargoDeps = rustPlatform.fetchCargoTarball { 
@@ -75,12 +75,7 @@ stdenv.mkDerivation ({
   postPatch = lib.optionalString ocamlPluginSupport ''
     sed -i plugins/ocaml/Makefile.am -e "
       s|\$(OCAMLLIB)|\"$out/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/\"|g
-      83ilibnbdkitocaml_la_LIBADD = ${ocamlPackages.ocaml}/lib/ocaml/libasmrun_pic.a
     "
-    sed -i plugins/rust/Makefile.am -e '
-      s|cargo build|cargo rustc --crate-type=rlib|
-      83d
-    '
   '';
 
   # Shell scripts with shebangs are ran during build
