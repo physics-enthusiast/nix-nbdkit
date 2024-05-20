@@ -22,7 +22,7 @@ let
     owner = "physics-enthusiast";
     repo = "nbdkit";
     rev = "test";
-    hash = "sha256-fnGMPgljsIcSxToWeD2/2J69Me29V8AqmvKzcGqUeFk=";
+    hash = "sha256-KZvrxL6PsWP+m1eDX0/kZaUwZYx7xPZ33O85WotDAlM=";
   };
   cargoDeps = rustPlatform.fetchCargoTarball { 
     src = runCommand "${src.name}-rust-deps" {} ''
